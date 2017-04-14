@@ -1,0 +1,26 @@
+.places-header {
+  position: fixed;
+  top: 0;
+  background: white;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.places-header .places-header-body {
+  max-width: 900px;
+  overflow: auto;
+}
+
+.places-header .place {
+  height: 100%;
+  padding: 16px;
+  cursor: pointer;
+}
+
+.places-header .place:hover,
+.places-header .place.is-selected:hover {
+  background: rgba(234, 234, 234, .7);
+}
+
+.places-header .place.is-selected {
+  background: #eaeaea;
+}

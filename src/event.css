@@ -1,0 +1,46 @@
+.event {
+  box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px;
+  margin-top: 25px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.event .content {
+  padding: 16px;
+}
+
+.event .content .title {
+  font-size: 24px;
+  color: rgba(0, 0, 0, 0.870588);
+  display: block;
+  line-height: 36px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: rgba(0, 0, 0, 0.870588);
+  text-decoration: none;
+}
+
+.event .content .place {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.541176);
+}
+
+.event .content .place a {
+  color: #365899;
+  margin-left: 5px;
+}
+
+.event .content .place a:hover {
+  text-decoration: underline;
+  opacity: 1;
+}
+
+.event .content .description {
+  margin-top: auto;
+  font-size: 14px;
+  line-height: 24px;
+  color: rgba(0, 0, 0, 0.870588);
+  height: 72px;
+  overflow: hidden;
+}
