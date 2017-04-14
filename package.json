@@ -2,6 +2,7 @@
   "name": "facebook-events",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://francescocioria.github.io/facebook-events",
   "dependencies": {
     "buildo-normalize-css": "^3.0.2",
     "classnames": "^2.2.5",
