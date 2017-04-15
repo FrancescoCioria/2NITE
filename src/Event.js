@@ -69,7 +69,7 @@ export default class Event extends React.Component {
     const endTime = `${this.pad2(endDateTime.getHours())}:${this.pad2(endDateTime.getMinutes())}`;
 
     return (
-      <View className='event' onClick={this.openModal} basis={200}>
+      <View className='event' basis={200}>
         {showModal && this.templateModal({ name, description, onDismiss: this.closeModal })}
         <View shrink={false}>
           <div
@@ -91,7 +91,9 @@ export default class Event extends React.Component {
               {` ${place.name}`}
             </a>
           </View>
-          <View className='description'>{description}</View>
+          <View className='description' onClick={this.openModal}>
+            {description}
+          </View>
         </View>
       </View>
     );

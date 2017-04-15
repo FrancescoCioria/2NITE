@@ -50,6 +50,7 @@
   color: rgba(0, 0, 0, 0.870588);
   height: 72px;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .event-modal .modal-header {
