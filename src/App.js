@@ -4,6 +4,10 @@ import groupBy from 'lodash/groupBy';
 import sortBy from 'lodash/sortBy';
 import request from 'request-promise';
 import View from 'react-flexview';
+import LoadingSpinner from 'buildo-react-components/lib/loading-spinner';
+import 'buildo-react-components/lib/loading-spinner/loadingSpinner.css';
+import { TextBlock, RectShape } from 'react-placeholder/lib/placeholders';
+import ReactPlaceholder from 'react-placeholder';
 import Event from './Event';
 import DateHeader from './DateHeader';
 import PlacesHeader from './PlacesHeader';
@@ -42,8 +46,8 @@ export default class App extends React.Component {
 
   state = {
     loading: true,
-    events: [],
-    places: []
+    events: null,
+    places: null
   }
 
   pad2(value) {
@@ -61,19 +65,15 @@ export default class App extends React.Component {
     const eventsRequest = venues.map(v => get(`https://graph.facebook.com/${v}/events`, { since: todayString }));
     const placesRequest = venues.map(v => get(`https://graph.facebook.com/${v}`, { since: todayString }));
 
-    const requests = Promise.all([
-      Promise.all(eventsRequest),
-      Promise.all(placesRequest)
-    ]);
-
-    requests.then(([eventsResponse, placesResponse]) => {
+    Promise.all(eventsRequest).then(eventsResponse => {
       const flattenEvents = flatten(eventsResponse.map(r => r.data));
       const events = flattenEvents.filter(e => new Date(e.start_time) > today);
 
-      this.setState({
-        events,
-        places: placesResponse
-      });
+      this.setState({ events });
+    });
+
+    Promise.all(placesRequest).then(placesResponse => {
+      this.setState({ places: placesResponse });
     });
   }
 
@@ -96,16 +96,38 @@ export default class App extends React.Component {
     return placeId ? this.templateByDate(placeEvents) : this.templateByDate(events);
   }
 
+  templatePlaceholder() {
+    return (
+      <View className='event' marginTop={120} style={{ position: 'relative', overflow: 'visible' }}>
+        <View style={{ position: 'absolute', top: -65 }} width='100%' height={30}>
+          <LoadingSpinner overlayColor='transparent' size={30} />
+        </View>
+        <View width='100%'>
+          <RectShape color='#eaeaea' style={{ flex: '0 0 200px', height: 200 }} />
+          <View column grow style={{ padding: 16 }}>
+            <TextBlock rows={1} color='#eaeaea' style={{ height: 15 }} />
+            <View width={170} basis={8} marginTop={8} style={{ background: '#eaeaea' }} />
+            <TextBlock rows={3} color='#efefef' style={{ height: 60, marginTop: 'auto' }} />
+          </View>
+        </View>
+      </View>
+    )
+  }
+
   render() {
+    const { places, events, selectedPlaceId } = this.state;
+
+    const ready = !!places && !!events;
     return (
       <View className='app' hAlignContent='center'>
         <PlacesHeader
-          places={this.state.places}
-          selectedPlaceId={this.state.selectedPlaceId}
+          places={places || []}
+          selectedPlaceId={selectedPlaceId}
           onSelect={(selectedPlaceId) => this.setState({ selectedPlaceId })}
         />
         <View className='body' grow column>
-          {this.templateByPlace(this.state.events, this.state.selectedPlaceId)}
+          {!ready && this.templatePlaceholder()}
+          {ready && this.templateByPlace(events, selectedPlaceId)}
         </View>
       </View>
     );

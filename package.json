@@ -12,6 +12,7 @@
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-flexview": "^1.0.4",
+    "react-placeholder": "^1.0.1",
     "request-promise": "^4.2.0",
     "tcomb-react": "^0.9.3"
   },
