@@ -6,7 +6,6 @@ import View from 'react-flexview';
 import LoadingSpinner from 'buildo-react-components/lib/loading-spinner';
 import 'buildo-react-components/lib/loading-spinner/loadingSpinner.css';
 import { TextBlock, RectShape } from 'react-placeholder/lib/placeholders';
-import ReactPlaceholder from 'react-placeholder';
 import Events from './Events';
 import PlacesHeader from './PlacesHeader';
 
@@ -86,7 +85,7 @@ export default class App extends React.Component {
 
   templatePlaceholder() {
     return (
-      <View className='event' marginTop={120} style={{ position: 'relative', overflow: 'visible' }}>
+      <View className='event' marginTop={120} marginBottom={30} style={{ position: 'relative', overflow: 'visible' }}>
         <View style={{ position: 'absolute', top: -65 }} width='100%' height={30}>
           <LoadingSpinner overlayColor='transparent' size={30} />
         </View>

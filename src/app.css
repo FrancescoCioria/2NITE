@@ -14,8 +14,8 @@
   margin-top: -20px;
 }
 
-.app .body > div:last-child,
-.app .body > div:last-child .event:last-child {
+.app .body .events > div:last-child,
+.app .body .events > div:last-child .event:last-child {
   margin-bottom: 80px;
 }
 

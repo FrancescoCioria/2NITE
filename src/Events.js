@@ -12,7 +12,7 @@ class Events extends React.Component {
     const eventsByDate = groupBy(sortBy(events, e => e.start_time), e => e.start_time.slice(0, 10));
 
     return (
-      <View column>
+      <View className='events' column>
         {Object.keys(eventsByDate).map(k => (
           <View column shrink={false} key={k}>
             {<DateHeader date={new Date(k)} />}
