@@ -96,6 +96,8 @@
   .event {
     flex-direction: column !important;
     flex: 0 0 auto !important;
+    border-radius: 0 !important;
+    margin-bottom: 10px;
   }
 
   .event .image {

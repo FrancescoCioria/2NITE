@@ -4,3 +4,10 @@
   border-bottom: 1px solid #eaeaea;
   font-size: 24px;
 }
+
+@media (max-width: 600px) {
+  .date-header {
+    margin-left: 16px;
+    margin-right: 16px;
+  }
+}

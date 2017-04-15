@@ -93,7 +93,7 @@ export default class App extends React.Component {
           <RectShape color='#eaeaea' style={{ flex: '0 0 200px', height: 200 }} />
           <View column grow style={{ padding: 16 }}>
             <TextBlock rows={1} color='#eaeaea' style={{ height: 15 }} />
-            <View width={170} basis={8} marginTop={8} style={{ background: '#eaeaea' }} />
+            <View width='30%' basis={8} marginTop={8} style={{ background: '#eaeaea' }} />
             <TextBlock rows={3} color='#efefef' style={{ height: 60, marginTop: 'auto' }} />
           </View>
         </View>
