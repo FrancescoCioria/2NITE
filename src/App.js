@@ -1,6 +1,5 @@
 import React from 'react';
 import flatten from 'lodash/flatten';
-import groupBy from 'lodash/groupBy';
 import sortBy from 'lodash/sortBy';
 import request from 'request-promise';
 import View from 'react-flexview';
@@ -8,8 +7,7 @@ import LoadingSpinner from 'buildo-react-components/lib/loading-spinner';
 import 'buildo-react-components/lib/loading-spinner/loadingSpinner.css';
 import { TextBlock, RectShape } from 'react-placeholder/lib/placeholders';
 import ReactPlaceholder from 'react-placeholder';
-import Event from './Event';
-import DateHeader from './DateHeader';
+import Events from './Events';
 import PlacesHeader from './PlacesHeader';
 
 import 'buildo-normalize-css';
@@ -77,23 +75,13 @@ export default class App extends React.Component {
     });
   }
 
-  templateByDate(events) {
-    const eventsByDate = groupBy(sortBy(events, e => e.start_time), e => e.start_time.slice(0, 10));
-
-    return Object.keys(eventsByDate).map(k => {
-      return (
-        <View column shrink={false} key={k}>
-          {<DateHeader date={new Date(k)} />}
-          {eventsByDate[k].map(e => <Event {...e} key={e.id} />)}
-        </View>
-      );
-    });
-  }
-
   templateByPlace(events, placeId) {
-    const placeEvents = sortBy(events, e => e.start_time).filter(e => e.place.id === placeId);
-
-    return placeId ? this.templateByDate(placeEvents) : this.templateByDate(events);
+    if (placeId) {
+      const placeEvents = sortBy(events, e => e.start_time).filter(e => e.place.id === placeId);
+      return <Events events={placeEvents} />;
+    } else {
+      return <Events events={events} />;
+    }
   }
 
   templatePlaceholder() {
