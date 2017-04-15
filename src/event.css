@@ -9,8 +9,15 @@
   padding: 16px;
 }
 
-.event .content .title {
+.event .image {
+  width: 200px;
+  height: 200px;
+}
+
+.event .content .title,
+.event-modal.modal .modal-content .modal-header .modal-title {
   font-size: 24px;
+  font-weight: 400;
   color: rgba(0, 0, 0, 0.870588);
   display: block;
   line-height: 36px;
@@ -43,4 +50,60 @@
   color: rgba(0, 0, 0, 0.870588);
   height: 72px;
   overflow: hidden;
+}
+
+.event-modal .modal-header {
+  overflow: auto;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 400;
+}
+
+.event-modal .modal-body {
+  overflow: auto;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.870588);
+}
+
+.event-modal .modal-body p {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+}
+
+.event-modal .centered-content-wrapper {
+  margin: 30px;
+}
+
+.event-modal .modal-content {
+  min-width: 0;
+}
+
+.event-modal.modal .modal-content .modal-header .modal-title {
+  margin-right: 10px;
+}
+
+.event-modal .modal-icon-close > svg {
+  height: 20px;
+  width: 20px;
+  margin: 10px;
+}
+
+@media (max-width: 600px) {
+  .event {
+    flex-direction: column !important;
+    flex: 0 0 auto !important;
+  }
+
+  .event .image {
+    width: 100%;
+    height: 150px;
+    background-size: cover;
+  }
+
+  .event .content .description {
+    margin-top: 15px;
+  }
 }

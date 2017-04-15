@@ -6,7 +6,8 @@
 }
 
 .places-header .places-header-body {
-  max-width: 900px;
+  max-width: 960px;
+  padding: 0 25px;
   overflow: auto;
 }
 
@@ -23,4 +24,10 @@
 
 .places-header .place.is-selected {
   background: #eaeaea;
+}
+
+@media (max-width: 600px) {
+  .places-header .place:hover {
+    background: transparent;
+  }
 }
