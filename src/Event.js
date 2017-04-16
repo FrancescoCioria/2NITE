@@ -41,8 +41,8 @@ export default class Event extends React.Component {
     return (
       <Modal
         className='event-modal'
-        transitionEnterTimeout={500}
-        transitionLeaveTimeout={500}
+        transitionEnterTimeout={0}
+        transitionLeaveTimeout={0}
         onDismiss={onDismiss}
         iconClose={(
           <svg width="64" version="1.1" height="64" viewBox="0 0 64 64" enableBackground="new 0 0 64 64">

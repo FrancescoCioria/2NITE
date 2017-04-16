@@ -1,48 +1,23 @@
 import React from 'react';
 import flatten from 'lodash/flatten';
-import sortBy from 'lodash/sortBy';
-import request from 'request-promise';
 import View from 'react-flexview';
-import LoadingSpinner from 'buildo-react-components/lib/loading-spinner';
-import 'buildo-react-components/lib/loading-spinner/loadingSpinner.css';
-import { TextBlock, RectShape } from 'react-placeholder/lib/placeholders';
-import Events from './Events';
-import PlacesHeader from './PlacesHeader';
+import { t } from 'tcomb-react';
+import { get } from './request';
+import EventsPage from './EventsPage';
+import WelcomePage from './WelcomePage';
 
 import 'buildo-normalize-css';
 import 'buildo-normalize-css/fullscreenApp.css';
 import 'react-flexview/lib/flexView.css';
 import './app.css';
 
-const venues = [
-  'bikocultureclub',
-  'bonaventura.mi',
-  'santeriasocialclub',
-  'circolomagnolia',
-  'alcatrazmilano'
-].sort();
-
-const get = (uri, qs) => {
-  const _request = request({
-    uri,
-    method: 'GET',
-    qs: {
-      access_token: '963390470430059|bGCaVUpEO9xur5e05TOFQdF7uUY',
-      ...qs
-    },
-    json: true
-  });
-
-  return _request.then(res => res.paging && res.paging.next ?
-    get(res.paging.next).then(r => ({ data: res.data.concat(r.data), paging: r.paging })) :
-    res
-  );
-}
+t.interface.strict = true;
 
 export default class App extends React.Component {
 
   state = {
     loading: true,
+    savedPlacesIds: localStorage.getItem('savedPlacesIds') ? localStorage.getItem('savedPlacesIds').split(',') : null,
     events: null,
     places: null
   }
@@ -51,7 +26,18 @@ export default class App extends React.Component {
     return value > 9 ? value : `0${value}`;
   }
 
-  componentDidMount() {
+  getPlaces() {
+    const { savedPlacesIds } = this.state;
+    const placesRequest = savedPlacesIds.map(v => get(`https://graph.facebook.com/${v}`));
+
+    Promise.all(placesRequest).then(placesResponse => {
+      this.setState({ places: placesResponse });
+    });
+  }
+
+  getEvents() {
+    const { savedPlacesIds } = this.state;
+
     const today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
     const todayString = [
       today.getFullYear(),
@@ -59,8 +45,7 @@ export default class App extends React.Component {
       this.pad2(today.getDate())
     ].join('-');
 
-    const eventsRequest = venues.map(v => get(`https://graph.facebook.com/${v}/events`, { since: todayString }));
-    const placesRequest = venues.map(v => get(`https://graph.facebook.com/${v}`, { since: todayString }));
+    const eventsRequest = savedPlacesIds.map(v => get(`https://graph.facebook.com/${v}/events`, { since: todayString }));
 
     Promise.all(eventsRequest).then(eventsResponse => {
       const flattenEvents = flatten(eventsResponse.map(r => r.data));
@@ -68,54 +53,32 @@ export default class App extends React.Component {
 
       this.setState({ events });
     });
-
-    Promise.all(placesRequest).then(placesResponse => {
-      this.setState({ places: placesResponse });
-    });
   }
 
-  templateByPlace(events, placeId) {
-    if (placeId) {
-      const placeEvents = sortBy(events, e => e.start_time).filter(e => e.place.id === placeId);
-      return <Events events={placeEvents} />;
-    } else {
-      return <Events events={events} />;
+  componentDidMount() {
+    if (this.state.savedPlacesIds) {
+      this.getPlaces();
+      this.getEvents();
     }
   }
 
-  templatePlaceholder() {
-    return (
-      <View className='event' marginTop={120} marginBottom={30} style={{ position: 'relative', overflow: 'visible' }}>
-        <View style={{ position: 'absolute', top: -65 }} width='100%' height={30}>
-          <LoadingSpinner overlayColor='transparent' size={30} />
-        </View>
-        <View width='100%'>
-          <RectShape color='#eaeaea' style={{ flex: '0 0 200px', height: 200 }} />
-          <View column grow style={{ padding: 16 }}>
-            <TextBlock rows={1} color='#eaeaea' style={{ height: 15 }} />
-            <View width='30%' basis={8} marginTop={8} style={{ background: '#eaeaea' }} />
-            <TextBlock rows={3} color='#efefef' style={{ height: 60, marginTop: 'auto' }} />
-          </View>
-        </View>
-      </View>
-    )
+  onAddPlaces = places => {
+    const savedPlacesIds = places.map(p => p.value);
+
+    localStorage.setItem('savedPlacesIds', savedPlacesIds.join(','));
+    this.setState({ savedPlacesIds }, () => {
+      this.getPlaces();
+      this.getEvents();
+    });
   }
 
   render() {
-    const { places, events, selectedPlaceId } = this.state;
+    const { places, events, selectedPlaceId, savedPlacesIds } = this.state;
 
-    const ready = !!places && !!events;
     return (
       <View className='app' hAlignContent='center'>
-        <PlacesHeader
-          places={places || []}
-          selectedPlaceId={selectedPlaceId}
-          onSelect={(selectedPlaceId) => this.setState({ selectedPlaceId })}
-        />
-        <View className='body' grow column>
-          {!ready && this.templatePlaceholder()}
-          {ready && this.templateByPlace(events, selectedPlaceId)}
-        </View>
+        {!savedPlacesIds && <WelcomePage onAddPlaces={this.onAddPlaces} />}
+        {savedPlacesIds && <EventsPage {...{ places, events, selectedPlaceId }} />}
       </View>
     );
   }

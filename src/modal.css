@@ -1,0 +1,51 @@
+._modal.modal .modal-content .modal-header .modal-title {
+  font-size: 24px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.870588);
+  display: block;
+  line-height: 36px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: rgba(0, 0, 0, 0.870588);
+  text-decoration: none;
+}
+
+._modal.modal .modal-header {
+  overflow: auto;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 400;
+}
+
+._modal.modal .modal-body {
+  overflow: auto;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.870588);
+}
+
+._modal.modal .modal-body p {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+}
+
+._modal.modal .centered-content-wrapper {
+  margin: 30px;
+}
+
+._modal.modal .modal-content {
+  min-width: 0;
+}
+
+._modal.modal .modal-content .modal-header .modal-title {
+  margin-right: 10px;
+}
+
+._modal.modal .modal-icon-close > svg {
+  height: 20px;
+  width: 20px;
+  margin: 10px;
+}
