@@ -21,13 +21,16 @@ export default class EventsPage extends React.Component {
       description: t.String,
       start_time: t.String,
       end_time: t.String,
-      place: t.interface({
-        id: t.String,
+      place: t.struct({
+        id: t.maybe(t.String),
         name: t.String
       })
-    }))),
-    selectedPlaceId: t.maybe(t.String)
+    })))
   });
+
+  state = {
+    selectedPlaceId: null
+  }
 
   templateByPlace(events, placeId) {
     if (placeId) {
@@ -57,7 +60,8 @@ export default class EventsPage extends React.Component {
   }
 
   render() {
-    const { places, events, selectedPlaceId } = this.props;
+    const { places, events } = this.props;
+    const { selectedPlaceId } = this.state;
 
     const ready = !!places && !!events;
     return (

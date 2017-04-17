@@ -16,8 +16,8 @@ class Events extends React.Component {
       description: t.String,
       start_time: t.String,
       end_time: t.String,
-      place: t.interface({
-        id: t.String,
+      place: t.struct({
+        id: t.maybe(t.String),
         name: t.String
       })
     }))

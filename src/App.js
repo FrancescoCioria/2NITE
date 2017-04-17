@@ -16,7 +16,6 @@ t.interface.strict = true;
 export default class App extends React.Component {
 
   state = {
-    loading: true,
     savedPlacesIds: localStorage.getItem('savedPlacesIds') ? localStorage.getItem('savedPlacesIds').split(',') : null,
     events: null,
     places: null
@@ -73,12 +72,12 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { places, events, selectedPlaceId, savedPlacesIds } = this.state;
+    const { places, events, savedPlacesIds } = this.state;
 
     return (
       <View className='app' hAlignContent='center'>
         {!savedPlacesIds && <WelcomePage onAddPlaces={this.onAddPlaces} />}
-        {savedPlacesIds && <EventsPage {...{ places, events, selectedPlaceId }} />}
+        {savedPlacesIds && <EventsPage {...{ places, events }} />}
       </View>
     );
   }
