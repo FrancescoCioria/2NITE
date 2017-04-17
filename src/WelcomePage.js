@@ -80,7 +80,7 @@ export default class WelcomePage extends React.Component {
           <button onClick={this.openModal}>
             Choose Places
           </button>
-          <img className='frame' src={process.env.NODE_ENV === 'development' ? '/welcome.jpg' : '/facebook-events/welcome.jpg'} />
+          <img className='frame' src={process.env.NODE_ENV === 'development' ? '/welcome.jpg' : '/2NITE/welcome.jpg'} />
         </View>
       </View>
     );

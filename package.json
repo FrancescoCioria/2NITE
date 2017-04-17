@@ -1,8 +1,8 @@
 {
-  "name": "facebook-events",
+  "name": "2NITE",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://francescocioria.github.io/facebook-events",
+  "homepage": "https://francescocioria.github.io/2NITE",
   "dependencies": {
     "buildo-normalize-css": "^3.0.2",
     "buildo-react-components": "^0.20.3",
