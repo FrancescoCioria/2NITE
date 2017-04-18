@@ -1,5 +1,5 @@
 .choose-places-modal .centered-content-wrapper {
-  min-width: 500px;
+  min-width: 0;
 }
 
 .choose-places-modal.modal .modal-content,
