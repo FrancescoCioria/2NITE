@@ -20,10 +20,10 @@ export default class ChoosePlacesModal extends React.Component {
   })
 
   state = {
-    places: this.props.defaultPlaces.map(p => ({
+    places: this.props.defaultPlaces ? this.props.defaultPlaces.map(p => ({
       value: p.id,
       label: p.name
-    }))
+    })) : undefined
   }
 
   onAddPlace = (places) => this.setState({ places })
