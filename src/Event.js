@@ -12,7 +12,7 @@ export default class Event extends React.Component {
   static propTypes = propTypes({
     id: t.String,
     name: t.String,
-    description: t.String,
+    description: t.maybe(t.String),
     start_time: t.String,
     end_time: t.String,
     place: t.struct({

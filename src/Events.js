@@ -13,7 +13,7 @@ class Events extends React.Component {
     events: t.list(t.interface({
       id: t.String,
       name: t.String,
-      description: t.String,
+      description: t.maybe(t.String),
       start_time: t.String,
       end_time: t.String,
       place: t.struct({
