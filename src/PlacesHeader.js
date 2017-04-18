@@ -50,18 +50,22 @@ export default class DateHeader extends React.Component {
     return (
       <View className='places-header' width='100%' hAlignContent='center'>
         {showModal && <ChoosePlacesModal onDismiss={closeModal} onSave={onEditPlaces} />}
-        <View className='places-header-body' grow>
-          <View shrink={false} marginLeft={10}>
-            LOGO
+        <View className='places-header-body' grow vAlignContent='center'>
+          <View shrink={false} marginRight={10}>
+            <img
+              className='logo'
+              src={process.env.NODE_ENV === 'development' ? '/logo.png' : '/2NITE/logo.png'}
+              alt=''
+            />
           </View>
-          <View grow>
+          <View grow className='places'>
             {places.map(p => (
               <View className={cx('place', { 'is-selected': selectedPlaceId === p.id })} shrink={false} onClick={() => this.onSelect(p.id)} key={p.id}>
                 {p.name}
               </View>
             ))}
           </View>
-          <View shrink={false} marginRight={10} onClick={openModal}>
+          <View className='plus' shrink={false} marginLeft={10} onClick={openModal} hAlignContent='center'>
             +
           </View>
         </View>
