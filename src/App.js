@@ -72,12 +72,15 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { places, events, savedPlacesIds } = this.state;
+    const {
+      state: { places, events, savedPlacesIds },
+      onAddPlaces
+    } = this;
 
     return (
       <View className='app' hAlignContent='center'>
-        {!savedPlacesIds && <WelcomePage onAddPlaces={this.onAddPlaces} />}
-        {savedPlacesIds && <EventsPage {...{ places, events }} />}
+        {!savedPlacesIds && <WelcomePage onAddPlaces={onAddPlaces} />}
+        {savedPlacesIds && <EventsPage {...{ places, events }} onEditPlaces={onAddPlaces} />}
       </View>
     );
   }

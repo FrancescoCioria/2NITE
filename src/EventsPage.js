@@ -25,7 +25,8 @@ export default class EventsPage extends React.Component {
         id: t.maybe(t.String),
         name: t.String
       })
-    })))
+    }))),
+    onEditPlaces: t.Function
   });
 
   state = {
@@ -60,7 +61,7 @@ export default class EventsPage extends React.Component {
   }
 
   render() {
-    const { places, events } = this.props;
+    const { places, events, onEditPlaces } = this.props;
     const { selectedPlaceId } = this.state;
 
     const ready = !!places && !!events;
@@ -70,6 +71,7 @@ export default class EventsPage extends React.Component {
           places={places || []}
           selectedPlaceId={selectedPlaceId}
           onSelect={(selectedPlaceId) => this.setState({ selectedPlaceId })}
+          onEditPlaces={onEditPlaces}
         />
         <View className='body' grow column>
           {!ready && this.templatePlaceholder()}
