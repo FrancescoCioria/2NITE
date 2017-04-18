@@ -32,41 +32,6 @@
   padding: 0 30px;
 }
 
-
-.welcome-page button,
-.choose-places-modal button {
-  background-color: #0084ff;
-  border: 1px solid #0084ff;
-  border-radius: 4px;
-  color: white;
-  display: block;
-  font-size: 17px;
-  font-weight: 400;
-  height: 44px;
-  padding: 0;
-  width: 318px;
-  margin: 50px auto 24px auto;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.welcome-page button:active,
-.choose-places-modal button:active {
-  background-color: #0077e5;
-  border: 1px solid transparent;
-  opacity: .2;
-  transform: scale(.98);
-}
-
-.welcome-page button:disabled,
-.choose-places-modal button:disabled {
-  cursor: not-allowed;
-  background-color: #0077e5;
-  border: 1px solid transparent;
-  opacity: .2;
-  transform: scale(.98);
-}
-
 .welcome-page .frame {
   width: 100%;
   margin-top: auto;
@@ -79,25 +44,4 @@
   bottom: 0;
   left: 0;
   background-size: contain;
-}
-
-.choose-places-modal .centered-content-wrapper {
-  min-width: 500px;
-}
-
-.choose-places-modal.modal .modal-content,
-.choose-places-modal.modal .modal-body {
-  overflow: visible;
-}
-
-.choose-places-modal .Select {
-  margin: 0 16px;
-}
-
-.Select .Select-input {
-  height: 40px;
-}
-
-.Select .Select-placeholder {
-  line-height: 40px;
 }

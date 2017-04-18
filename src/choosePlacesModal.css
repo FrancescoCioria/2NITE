@@ -1,0 +1,20 @@
+.choose-places-modal .centered-content-wrapper {
+  min-width: 500px;
+}
+
+.choose-places-modal.modal .modal-content,
+.choose-places-modal.modal .modal-body {
+  overflow: visible;
+}
+
+.choose-places-modal .Select {
+  margin: 0 16px;
+}
+
+.choose-places-modal .Select .Select-input {
+  height: 40px;
+}
+
+.choose-places-modal .Select .Select-placeholder {
+  line-height: 40px;
+}

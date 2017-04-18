@@ -28,6 +28,37 @@ a:hover {
   opacity: .8;
 }
 
+button {
+  background-color: #0084ff;
+  border: 1px solid #0084ff;
+  border-radius: 4px;
+  color: white;
+  display: block;
+  font-size: 17px;
+  font-weight: 400;
+  height: 44px;
+  padding: 0;
+  width: 318px;
+  margin: 50px auto 24px auto;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+button:active {
+  background-color: #0077e5;
+  border: 1px solid transparent;
+  opacity: .2;
+  transform: scale(.98);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  background-color: #0077e5;
+  border: 1px solid transparent;
+  opacity: .2;
+  transform: scale(.98);
+}
+
 @media (max-width: 600px) {
   .app .body {
     padding: 0;
