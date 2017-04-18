@@ -11,11 +11,20 @@ import './choosePlacesModal.css';
 export default class ChoosePlacesModal extends React.Component {
 
   static propTypes = propTypes({
+    defaultPlaces: t.maybe(t.list(t.interface({
+      id: t.String,
+      name: t.String
+    }))),
     onDismiss: t.Function,
     onSave: t.Function
   })
 
-  state = {}
+  state = {
+    places: this.props.defaultPlaces.map(p => ({
+      value: p.id,
+      label: p.name
+    }))
+  }
 
   onAddPlace = (places) => this.setState({ places })
 

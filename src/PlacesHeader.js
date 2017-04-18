@@ -49,7 +49,9 @@ export default class DateHeader extends React.Component {
     } = this;
     return (
       <View className='places-header' width='100%' hAlignContent='center'>
-        {showModal && <ChoosePlacesModal onDismiss={closeModal} onSave={onEditPlaces} />}
+        {showModal && (
+          <ChoosePlacesModal onDismiss={closeModal} onSave={onEditPlaces} defaultPlaces={places} />
+        )}
         <View className='places-header-body' grow vAlignContent='center'>
           <View shrink={false} marginRight={10}>
             <img
