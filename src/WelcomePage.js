@@ -32,7 +32,9 @@ export default class WelcomePage extends React.Component {
 
     return (
       <View className='welcome-page' hAlignContent='center'>
-        {showModal && <ChoosePlacesModal onDismiss={this.closeModal} onSave={this.onSave} />}
+        {showModal && (
+          <ChoosePlacesModal onDismiss={this.closeModal} onSave={this.onSave} buttonLabel='Start using 2NITE' />
+        )}
         <View className='body' grow column>
           <h1>2NITE</h1>
           <p>Choose your places to get started.</p>

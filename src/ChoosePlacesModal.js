@@ -16,6 +16,7 @@ export default class ChoosePlacesModal extends React.Component {
       id: t.String,
       name: t.String
     }))),
+    buttonLabel: t.String,
     onDismiss: t.Function,
     onSave: t.Function
   })
@@ -55,7 +56,7 @@ export default class ChoosePlacesModal extends React.Component {
   render() {
     const {
       state: { places },
-      props: { onDismiss },
+      props: { onDismiss, buttonLabel },
       onAddPlace,
       onRemovePlace,
       onSave
@@ -76,7 +77,7 @@ export default class ChoosePlacesModal extends React.Component {
         <Dropdown.Async loadOptions={loadOptions} onChange={onAddPlace} />
         {this.templateAddedPlaces({ places, onRemovePlace })}
         <button onClick={onSave} disabled={!places || places.length === 0}>
-          Start using 2NITE
+          {buttonLabel}
         </button>
       </Modal>
     )
