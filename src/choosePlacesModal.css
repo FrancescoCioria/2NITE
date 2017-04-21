@@ -1,10 +1,15 @@
 .choose-places-modal .centered-content-wrapper {
-  min-width: 0;
+  min-width: 500px;
 }
 
 .choose-places-modal.modal .modal-content,
 .choose-places-modal.modal .modal-body {
   overflow: visible;
+}
+
+.choose-places-modal button {
+  margin-bottom: 0;
+  margin-top: 0;
 }
 
 .choose-places-modal .Select {
@@ -17,4 +22,35 @@
 
 .choose-places-modal .Select .Select-placeholder {
   line-height: 40px;
+}
+
+.choose-places-modal .added-places {
+  margin: 16px;
+  margin-bottom: 25px;
+  overflow: auto;
+}
+
+.choose-places-modal .added-places .added-place {
+  padding: 7px;
+}
+
+.choose-places-modal .added-places .added-place:hover {
+  background: #eaeaea;
+  border-radius: 3px;
+}
+
+.choose-places-modal .added-places .remove {
+  font-size: 14px;
+  color: #d01919;
+  cursor: pointer;
+}
+
+.choose-places-modal .added-places .remove:hover {
+  opacity: 0.7;
+}
+
+@media (max-width: 600px) {
+  .choose-places-modal .centered-content-wrapper {
+    min-width: 0;
+  }
 }
