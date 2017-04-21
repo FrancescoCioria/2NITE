@@ -1,5 +1,6 @@
 import React from 'react';
 import flatten from 'lodash/flatten';
+import sortBy from 'lodash/sortBy';
 import View from 'react-flexview';
 import { t } from 'tcomb-react';
 import { get } from './request';
@@ -30,7 +31,7 @@ export default class App extends React.Component {
     const placesRequest = savedPlacesIds.map(v => get(`https://graph.facebook.com/${v}`));
 
     Promise.all(placesRequest).then(placesResponse => {
-      this.setState({ places: placesResponse });
+      this.setState({ places: sortBy(placesResponse, p => p.name.toLowerCase()) });
     });
   }
 
