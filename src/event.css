@@ -3,6 +3,7 @@
   margin-top: 25px;
   border-radius: 2px;
   overflow: hidden;
+  background: white;
 }
 
 .event .content {

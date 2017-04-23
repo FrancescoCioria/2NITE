@@ -1,5 +1,5 @@
 import React from 'react';
-import cx from 'classnames';
+// import cx from 'classnames';
 import { t, propTypes } from 'tcomb-react';
 import View from 'react-flexview';
 import ChoosePlacesModal from './ChoosePlacesModal';
@@ -13,7 +13,7 @@ export default class DateHeader extends React.Component {
       id: t.String,
       name: t.String
     })),
-    selectedPlaceId: t.maybe(t.String),
+    onSearch: t.Function,
     onSelect: t.Function,
     onEditPlaces: t.Function
   });
@@ -41,11 +41,13 @@ export default class DateHeader extends React.Component {
     onSelect(id === selectedPlaceId ? null : id);
   }
 
+  onSearch = ({ target: { value } }) => this.props.onSearch(value)
+
   render() {
     const {
+      props: { places },
       state: { showModal },
-      props: { places, selectedPlaceId },
-      closeModal, openModal, onEditPlaces
+      closeModal, openModal, onEditPlaces, onSearch
     } = this;
     return (
       <View className='places-header' width='100%' hAlignContent='center'>
@@ -60,12 +62,8 @@ export default class DateHeader extends React.Component {
               alt=''
             />
           </View>
-          <View grow className='places'>
-            {places.map(p => (
-              <View className={cx('place', { 'is-selected': selectedPlaceId === p.id })} shrink={false} onClick={() => this.onSelect(p.id)} key={p.id}>
-                {p.name}
-              </View>
-            ))}
+          <View grow className='search'>
+            <input placeholder='Search for places or events' onChange={onSearch} />
           </View>
           <View className='plus' shrink={false} marginLeft={10} onClick={openModal} hAlignContent='center'>
             +

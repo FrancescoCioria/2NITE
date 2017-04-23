@@ -1,5 +1,5 @@
 import React from 'react';
-import sortBy from 'lodash/sortBy';
+import debounce from 'lodash/debounce';
 import { t, propTypes } from 'tcomb-react';
 import View from 'react-flexview';
 import LoadingSpinner from 'buildo-react-components/lib/loading-spinner';
@@ -30,13 +30,16 @@ export default class EventsPage extends React.Component {
   });
 
   state = {
-    selectedPlaceId: null
+    selectedPlaceId: null,
+    searchQuery: null
   }
 
-  templateByPlace(events, placeId) {
-    if (placeId) {
-      const placeEvents = sortBy(events, e => e.start_time).filter(e => e.place.id === placeId);
-      return <Events events={placeEvents} />;
+  onSearch = debounce(searchQuery => this.setState({ searchQuery }), 300)
+
+  templateByPlace(events, searchQuery) {
+    if (searchQuery) {
+      const filteredEvents = events.filter(e => `${e.name}__${e.place.name}`.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1);
+      return <Events events={filteredEvents} />;
     } else {
       return <Events events={events} />;
     }
@@ -61,21 +64,24 @@ export default class EventsPage extends React.Component {
   }
 
   render() {
-    const { places, events, onEditPlaces } = this.props;
-    const { selectedPlaceId } = this.state;
+    const {
+      props: { places, events, onEditPlaces },
+      state: { searchQuery },
+      onSearch
+    } = this;
 
     const ready = !!places && !!events;
     return (
       <View className='events-page' grow hAlignContent='center'>
         <PlacesHeader
           places={places || []}
-          selectedPlaceId={selectedPlaceId}
           onSelect={(selectedPlaceId) => this.setState({ selectedPlaceId })}
+          onSearch={onSearch}
           onEditPlaces={onEditPlaces}
         />
         <View className='body' grow column>
           {!ready && this.templatePlaceholder()}
-          {ready && this.templateByPlace(events, selectedPlaceId)}
+          {ready && this.templateByPlace(events, searchQuery)}
         </View>
       </View>
     );
