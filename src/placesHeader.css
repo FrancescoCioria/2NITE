@@ -20,11 +20,12 @@
 .places-header .search > .icon-clear {
   display: none;
   position: absolute;
-  width: 15px;
-  height: 15px;
+  width: 35px;
+  height: 35px;
+  padding: 10px;
   color: red;
-  right: 25px;
-  top: 19px;
+  right: 15px;
+  top: 9px;
   cursor: pointer;
   fill: white;
 }
