@@ -1,4 +1,4 @@
-* {
+div {
   transition: all .15s ease;
 }
 
@@ -38,8 +38,8 @@ a:hover {
 }
 
 button {
-  background-color: #ce7812;
-  border: 1px solid #ce7812;
+  background-color: #fd9319;
+  border: 1px solid #fd9319;
   border-radius: 4px;
   color: white;
   display: block;
@@ -51,10 +51,12 @@ button {
   margin: 50px auto 24px auto;
   cursor: pointer;
   flex-shrink: 0;
+  outline: none !important;
 }
 
-button:active {
-  background-color: #0077e5;
+button:active,
+button:disabled {
+  /*background-color: #0077e5;*/
   border: 1px solid transparent;
   opacity: .2;
   transform: scale(.98);
@@ -62,10 +64,6 @@ button:active {
 
 button:disabled {
   cursor: not-allowed;
-  background-color: #0077e5;
-  border: 1px solid transparent;
-  opacity: .2;
-  transform: scale(.98);
 }
 
 @media (max-width: 600px) {
