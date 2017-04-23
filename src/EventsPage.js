@@ -80,10 +80,12 @@ export default class EventsPage extends React.Component {
           onSearch={onSearch}
           onEditPlaces={onEditPlaces}
         />
-        <View className='body' grow column>
-          {!ready && this.templatePlaceholder()}
+          {!ready && (
+            <View className='body' grow column>
+              {this.templatePlaceholder()}
+            </View>
+          )}
           {ready && this.templateByPlace(events, searchQuery)}
-        </View>
       </View>
     );
   }

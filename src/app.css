@@ -14,17 +14,19 @@ html {
   margin-top: 50px;
 }
 
-.app .body {
+.app .body,
+.app .events-container {
   max-width: 960px;
   padding: 0 40px;
 }
 
-.app .body {
+.app .body,
+.app .events {
   margin-top: -20px;
 }
 
-.app .body .events > div:last-child,
-.app .body .events > div:last-child .event:last-child {
+.app .events .events-container > div:last-child,
+.app .events .events-container > div:last-child .event:last-child {
   margin-bottom: 80px;
 }
 

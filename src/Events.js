@@ -54,8 +54,8 @@ class Events extends React.Component {
     const eventsByDate = groupBy(sortBy(events, e => e.start_time).slice(0, slice), e => e.start_time.slice(0, 10)); // TODO: remove slice perf hack!!!
 
     return (
-      <View className='events' column onScroll={onScroll} style={{ overflow: 'auto' }}>
-        <div ref={r => this.container = r}>
+      <View className='events' column hAlignContent='center' width='100%' onScroll={onScroll} style={{ overflow: 'auto' }}>
+        <div className='events-container' ref={r => this.container = r}>
           {Object.keys(eventsByDate).map(k => (
             <View column shrink={false} key={k}>
               {<DateHeader date={new Date(k)} />}
