@@ -14,7 +14,8 @@
 }
 
 .places-header .search > input {
-  background: rgba(255, 255, 255, 0.3);
+  background: #65696c;
+  /*background: rgba(255, 255, 255, 0.3);*/
   border: none;
   outline: none;
   border-radius: 1px;
@@ -51,4 +52,22 @@
   width: 40px;
   height: 40px;
   background: #eaeaea;
+}
+
+@media (max-width: 600px) {
+  .places-header .places-header-body {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .places-header .search.is-focused {
+    margin-left: -60px;
+    margin-right: -60px;
+    z-index: 10;
+  }
+
+  .places-header .search.is-focused > input {
+    height: 51px;
+    margin-bottom: -1px;
+  }
 }

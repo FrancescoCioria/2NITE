@@ -1,5 +1,5 @@
 import React from 'react';
-// import cx from 'classnames';
+import cx from 'classnames';
 import { t, propTypes } from 'tcomb-react';
 import View from 'react-flexview';
 import ChoosePlacesModal from './ChoosePlacesModal';
@@ -46,7 +46,7 @@ export default class DateHeader extends React.Component {
   render() {
     const {
       props: { places },
-      state: { showModal },
+      state: { showModal, focused },
       closeModal, openModal, onEditPlaces, onSearch
     } = this;
     return (
@@ -62,8 +62,8 @@ export default class DateHeader extends React.Component {
               alt=''
             />
           </View>
-          <View grow className='search'>
-            <input placeholder='Search for places or events' onChange={onSearch} />
+          <View grow className={cx('search', { 'is-focused': focused })}>
+            <input placeholder='Search for places or events' onChange={onSearch} onFocus={() => this.setState({ focused: true })} onBlur={() => this.setState({ focused: false })} />
           </View>
           <View className='plus' shrink={false} marginLeft={10} onClick={openModal} hAlignContent='center'>
             +
