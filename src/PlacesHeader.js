@@ -20,7 +20,7 @@ export default class DateHeader extends React.Component {
 
   state = {
     showModal: false,
-    querySearch: null,
+    querySearch: '',
     focused: false
   }
 

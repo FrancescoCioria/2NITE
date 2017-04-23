@@ -38,7 +38,8 @@ export default class EventsPage extends React.Component {
 
   templateByPlace(events, searchQuery) {
     if (searchQuery) {
-      const filteredEvents = events.filter(e => `${e.name}__${e.place.name}`.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1);
+      const searchQueries = searchQuery.toLowerCase().split(' ').filter(s => s.length > 0);
+      const filteredEvents = events.filter(e => !!searchQueries.find(s => `${e.name}__${e.place.name}`.toLowerCase().indexOf(s) !== -1));
       return <Events events={filteredEvents} />;
     } else {
       return <Events events={events} />;
