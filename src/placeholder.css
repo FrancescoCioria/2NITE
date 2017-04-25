@@ -1,0 +1,36 @@
+.placeholder {
+  box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px;
+  margin-top: 25px;
+  border-radius: 2px;
+  overflow: hidden;
+  background: white;
+  position: relative;
+  overflow: visible;
+}
+
+.placeholder .content {
+  padding: 16px;
+}
+
+.placeholder .content .description {
+  margin-top: auto;
+  height: 60px;
+  overflow: hidden;
+}
+
+@media (max-width: 600px) {
+  .placeholder-event {
+    flex-direction: column !important;
+    border-radius: 0 !important;
+  }
+
+  .placeholder .image {
+    width: 100% !important;
+    height: 150px !important;
+    background-size: cover !important;
+  }
+
+  .placeholder .content .description {
+    margin-top: 35px;
+  }
+}
