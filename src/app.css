@@ -69,7 +69,8 @@ button:disabled {
 }
 
 @media (max-width: 600px) {
-  .app .body {
+  .app .body,
+  .app .events-container {
     padding: 0;
   }
 }
