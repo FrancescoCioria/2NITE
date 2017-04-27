@@ -15,8 +15,8 @@ class Events extends React.Component {
       id: t.String,
       name: t.String,
       description: t.maybe(t.String),
-      start_time: t.String,
-      end_time: t.String,
+      startTime: t.String,
+      endTime: t.String,
       place: t.struct({
         id: t.maybe(t.String),
         name: t.String
@@ -49,17 +49,23 @@ class Events extends React.Component {
       _onScroll: onScroll
     } = this;
 
-    const eventsByDate = groupBy(sortBy(events, e => e.start_time).slice(0, slice), e => e.start_time.slice(0, 10)); // TODO: remove slice perf hack!!!
+    const eventsByDate = groupBy(sortBy(events, e => e.startTime).slice(0, slice), e => e.startTime.slice(0, 10)); // TODO: remove slice perf hack!!!
 
     return (
       <View className='events' hAlignContent='center' grow onScroll={onScroll} style={{ overflow: 'auto' }}>
-        <View className='events-container' column grow ref={r => this.container = r}>
-          {Object.keys(eventsByDate).map(k => (
-            <View column shrink={false} key={k}>
-              {<DateHeader date={new Date(k)} />}
-              {eventsByDate[k].map(e => <Event {...e} key={e.id} />)}
+        <View column>
+          <div className='events-container' ref={r => this.container = r}>
+            <View shrink={false}>
+              <label>My Places Events</label>
+              <label>Nearby Events</label>
             </View>
-          ))}
+            {Object.keys(eventsByDate).map(k => (
+              <View column shrink={false} key={k}>
+                {<DateHeader date={new Date(k)} />}
+                {eventsByDate[k].map(e => <Event {...e} key={e.id} />)}
+              </View>
+            ))}
+          </div>
         </View>
       </View>
     );

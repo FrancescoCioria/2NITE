@@ -15,8 +15,8 @@ export default class EventsPage extends React.Component {
       id: t.String,
       name: t.String,
       description: t.maybe(t.String),
-      start_time: t.String,
-      end_time: t.String,
+      startTime: t.String,
+      endTime: t.String,
       place: t.struct({
         id: t.maybe(t.String),
         name: t.String

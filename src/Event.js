@@ -13,8 +13,12 @@ export default class Event extends React.Component {
     id: t.String,
     name: t.String,
     description: t.maybe(t.String),
-    start_time: t.String,
-    end_time: t.String,
+    startTime: t.String,
+    endTime: t.String,
+    cover: t.interface({
+      id: t.String,
+      source: t.maybe(t.String)
+    }),
     place: t.struct({
       id: t.maybe(t.String),
       name: t.String
@@ -59,14 +63,14 @@ export default class Event extends React.Component {
   }
 
   render() {
-    const { name, id, place, description, start_time, end_time } = this.props;
+    const { name, id, place, description, startTime, endTime, cover } = this.props;
     const { showModal } = this.state;
 
-    const startDateTime = new Date(start_time);
-    const endDateTime = new Date(end_time);
+    const startDateTime = new Date(startTime);
+    const endDateTime = new Date(endTime);
 
-    const startTime = `${this.pad2(startDateTime.getHours())}:${this.pad2(startDateTime.getMinutes())}`;
-    const endTime = `${this.pad2(endDateTime.getHours())}:${this.pad2(endDateTime.getMinutes())}`;
+    const startTimeLabel = `${this.pad2(startDateTime.getHours())}:${this.pad2(startDateTime.getMinutes())}`;
+    const endTimeLabel = `${this.pad2(endDateTime.getHours())}:${this.pad2(endDateTime.getMinutes())}`;
 
     return (
       <View className='event' basis={200}>
@@ -75,7 +79,7 @@ export default class Event extends React.Component {
           <div
             className='image'
             style={{
-              backgroundImage: `url(https://graph.facebook.com/${id}/picture?access_token=963390470430059|bGCaVUpEO9xur5e05TOFQdF7uUY&type=large)`
+              backgroundImage: `url(${cover.source || `https://graph.facebook.com/${id}/picture?access_token=963390470430059|bGCaVUpEO9xur5e05TOFQdF7uUY&type=large`})`
             }}
           />
         </View>
@@ -86,7 +90,7 @@ export default class Event extends React.Component {
             </a>
           </View>
           <View className='place'>
-            {`${startTime} - ${endTime} @`}
+            {`${startTimeLabel} - ${endTimeLabel} @`}
             <a href={`https://www.facebook.com/${place.id}/`} target='_blank'>
               {` ${place.name}`}
             </a>
