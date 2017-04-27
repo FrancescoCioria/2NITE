@@ -49,8 +49,6 @@ class Events extends React.Component {
       _onScroll: onScroll
     } = this;
 
-    console.log({ rendered: slice });
-
     const eventsByDate = groupBy(sortBy(events, e => e.start_time).slice(0, slice), e => e.start_time.slice(0, 10)); // TODO: remove slice perf hack!!!
 
     return (

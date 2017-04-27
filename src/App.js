@@ -1,4 +1,5 @@
 import React from 'react';
+import debounce from 'lodash/debounce';
 import flatten from 'lodash/flatten';
 import sortBy from 'lodash/sortBy';
 import View from 'react-flexview';
@@ -6,6 +7,7 @@ import { t } from 'tcomb-react';
 import { get } from './request';
 import EventsPage from './EventsPage';
 import WelcomePage from './WelcomePage';
+import PlacesHeader from './PlacesHeader';
 
 import 'buildo-normalize-css';
 import 'buildo-normalize-css/fullscreenApp.css';
@@ -19,7 +21,8 @@ export default class App extends React.Component {
   state = {
     savedPlacesIds: localStorage.getItem('savedPlacesIds') ? localStorage.getItem('savedPlacesIds').split(',') : null,
     events: null,
-    places: null
+    places: null,
+    searchQuery: null
   }
 
   pad2(value) {
@@ -72,16 +75,42 @@ export default class App extends React.Component {
     });
   }
 
+  onSearch = debounce(searchQuery => this.setState({ searchQuery }), 300)
+
+  filterEvents = (events, searchQuery) => {
+    if (events && searchQuery) {
+      const searchQueries = searchQuery.toLowerCase().split(' ').filter(s => s.length > 0);
+      return events.filter(e => !!searchQueries.find(s => `${e.name}__${e.place.name}`.toLowerCase().indexOf(s) !== -1));
+    }
+
+    return events;
+  }
+
   render() {
     const {
-      state: { places, events, savedPlacesIds },
-      onAddPlaces
+      state: { places, events, searchQuery, savedPlacesIds },
+      onAddPlaces, onSearch, filterEvents
     } = this;
+
+    const showWelcomePage = !savedPlacesIds;
+    const showEventsPage = !showWelcomePage;
 
     return (
       <View className='app' hAlignContent='center'>
-        {!savedPlacesIds && <WelcomePage onAddPlaces={onAddPlaces} />}
-        {savedPlacesIds && <EventsPage {...{ places, events }} onEditPlaces={onAddPlaces} />}
+        {showWelcomePage && <WelcomePage onAddPlaces={onAddPlaces} />}
+        {showEventsPage && (
+          <PlacesHeader
+            places={places || []}
+            onSearch={onSearch}
+            onEditPlaces={onAddPlaces}
+          />
+        )}
+        {showEventsPage && (
+          <EventsPage
+            places={places}
+            events={filterEvents(events, searchQuery)}
+          />
+        )}
       </View>
     );
   }

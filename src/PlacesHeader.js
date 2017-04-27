@@ -14,7 +14,6 @@ export default class DateHeader extends React.Component {
       name: t.String
     })),
     onSearch: t.Function,
-    onSelect: t.Function,
     onEditPlaces: t.Function
   });
 
@@ -35,12 +34,6 @@ export default class DateHeader extends React.Component {
   onEditPlaces = (places) => {
     this.props.onEditPlaces(places);
     this.closeModal();
-  }
-
-  onSelect = (id) => {
-    const { selectedPlaceId, onSelect } = this.props;
-
-    onSelect(id === selectedPlaceId ? null : id);
   }
 
   onSearch = ({ target: { value: querySearch } }) => {

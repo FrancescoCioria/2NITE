@@ -1,9 +1,7 @@
 import React from 'react';
-import debounce from 'lodash/debounce';
 import { t, propTypes } from 'tcomb-react';
 import View from 'react-flexview';
 import Events from './Events';
-import PlacesHeader from './PlacesHeader';
 import Placeholder from './Placeholder';
 
 export default class EventsPage extends React.Component {
@@ -23,16 +21,8 @@ export default class EventsPage extends React.Component {
         id: t.maybe(t.String),
         name: t.String
       })
-    }))),
-    onEditPlaces: t.Function
+    })))
   });
-
-  state = {
-    selectedPlaceId: null,
-    searchQuery: null
-  }
-
-  onSearch = debounce(searchQuery => this.setState({ searchQuery }), 300)
 
   templateByPlace(events, searchQuery) {
     if (searchQuery) {
@@ -45,27 +35,17 @@ export default class EventsPage extends React.Component {
   }
 
   render() {
-    const {
-      props: { places, events, onEditPlaces },
-      state: { searchQuery },
-      onSearch
-    } = this;
+    const { places, events } = this.props;
 
     const ready = !!places && !!events;
     return (
       <View className='events-page' grow hAlignContent='center'>
-        <PlacesHeader
-          places={places || []}
-          onSelect={(selectedPlaceId) => this.setState({ selectedPlaceId })}
-          onSearch={onSearch}
-          onEditPlaces={onEditPlaces}
-        />
-          {!ready && (
-            <View className='body' grow column>
-              <Placeholder />
-            </View>
-          )}
-          {ready && this.templateByPlace(events, searchQuery)}
+        {!ready && (
+          <View className='body' grow column>
+            <Placeholder />
+          </View>
+        )}
+        {ready && this.templateByPlace(events)}
       </View>
     );
   }
