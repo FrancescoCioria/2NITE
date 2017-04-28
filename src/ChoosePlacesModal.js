@@ -50,7 +50,7 @@ export default class ChoosePlacesModal extends React.Component {
           </View>
         ))}
       </View>
-    )
+    );
   }
 
   render() {
@@ -66,7 +66,7 @@ export default class ChoosePlacesModal extends React.Component {
       if (input.length > 0) {
         this.searchPlaces(input).then(({ data: places }) => {
           cb(null, { options: places.map(p => ({ value: p.id, label: p.name })) });
-        })
+        });
       } else {
         cb(null, { options: [] });
       }
@@ -80,6 +80,6 @@ export default class ChoosePlacesModal extends React.Component {
           {buttonLabel}
         </button>
       </Modal>
-    )
+    );
   }
 }

@@ -34,9 +34,9 @@ class Events extends React.Component {
     const total = this.props.events.length;
 
     if (slice < total && scrollTop > clientHeight * 0.7) {
-      this.setState({ slice: Math.min(Math.round(slice * 0.7 *2), total) })
+      this.setState({ slice: Math.min(Math.round(slice * 0.7 * 2), total) });
     } else if (slice > 20 && scrollTop < clientHeight * 0.2) {
-      this.setState({ slice: Math.max(Math.round(slice * 0.3), 20) })
+      this.setState({ slice: Math.max(Math.round(slice * 0.3), 20) });
     }
   }, 50);
 
@@ -54,7 +54,7 @@ class Events extends React.Component {
     return (
       <View className='events' hAlignContent='center' grow onScroll={onScroll} style={{ overflow: 'auto' }}>
         <View column>
-          <div className='events-container' ref={r => this.container = r}>
+          <div className='events-container' ref={r => { this.container = r; }}>
             <View shrink={false}>
               <label>My Places Events</label>
               <label>Nearby Events</label>

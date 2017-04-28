@@ -119,7 +119,7 @@ export default class App extends React.Component {
           place: {
             id: e.venue.id,
             name: e.venue.name
-          },
+          }
         }));
 
         this.setState({ nearbyEvents });

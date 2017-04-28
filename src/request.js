@@ -15,4 +15,4 @@ export const get = (uri, qs, getAll = true) => {
     get(res.paging.next).then(r => ({ data: res.data.concat(r.data), paging: r.paging })) :
     res
   );
-}
+};
