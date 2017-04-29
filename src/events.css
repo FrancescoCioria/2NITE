@@ -1,0 +1,22 @@
+.events {
+  overflow: auto;
+}
+
+.events .tabs {
+  margin-top: 50px;
+}
+
+.events .tabs .tab {
+  margin-right: 20px;
+  color: #fd9319;
+  cursor: pointer;
+  padding: 0 5px 10px;
+}
+
+.events .tabs .tab.is-selected {
+  border-bottom: 2px solid #fd9319;
+}
+
+.events .tabs .tab:hover {
+  color: #ce7812;
+}

@@ -16,26 +16,22 @@ export default class EventsPage extends React.Component {
       name: t.String,
       description: t.maybe(t.String),
       startTime: t.String,
-      endTime: t.String,
+      endTime: t.maybe(t.String),
       place: t.struct({
         id: t.maybe(t.String),
         name: t.String
       })
-    })))
+    }))),
+    view: t.String,
+    transitionTo: t.Function
   });
 
-  templateByPlace(events, searchQuery) {
-    if (searchQuery) {
-      const searchQueries = searchQuery.toLowerCase().split(' ').filter(s => s.length > 0);
-      const filteredEvents = events.filter(e => !!searchQueries.find(s => `${e.name}__${e.place.name}`.toLowerCase().indexOf(s) !== -1));
-      return <Events events={filteredEvents} />;
-    } else {
-      return <Events events={events} />;
-    }
+  templateByPlace({ events, transitionTo, view }) {
+    return <Events events={events} transitionTo={transitionTo} view={view} />;
   }
 
   render() {
-    const { places, events } = this.props;
+    const { places, events, transitionTo, view } = this.props;
 
     const ready = !!places && !!events;
     return (
@@ -45,7 +41,7 @@ export default class EventsPage extends React.Component {
             <Placeholder />
           </View>
         )}
-        {ready && this.templateByPlace(events)}
+        {ready && this.templateByPlace({ events, transitionTo, view })}
       </View>
     );
   }

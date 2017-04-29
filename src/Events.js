@@ -1,12 +1,18 @@
 import React from 'react';
-import View from 'react-flexview';
+import cx from 'classnames';
 import pure from 'buildo-react-pure';
 import debounce from 'lodash/debounce';
 import groupBy from 'lodash/groupBy';
 import sortBy from 'lodash/sortBy';
 import { t, propTypes } from 'tcomb-react';
+import View from 'react-flexview';
 import DateHeader from './DateHeader';
 import Event from './Event';
+
+import './events.css';
+
+const EVENTS_VIEW = 'events_view';
+const NEARBY_VIEW = 'nearby_view';
 
 class Events extends React.Component {
 
@@ -16,12 +22,14 @@ class Events extends React.Component {
       name: t.String,
       description: t.maybe(t.String),
       startTime: t.String,
-      endTime: t.String,
+      endTime: t.maybe(t.String),
       place: t.struct({
         id: t.maybe(t.String),
         name: t.String
       })
-    }))
+    })),
+    view: t.String,
+    transitionTo: t.Function
   })
 
   state = {
@@ -44,7 +52,7 @@ class Events extends React.Component {
 
   render() {
     const {
-      props: { events },
+      props: { events, transitionTo, view },
       state: { slice },
       _onScroll: onScroll
     } = this;
@@ -52,12 +60,22 @@ class Events extends React.Component {
     const eventsByDate = groupBy(sortBy(events, e => e.startTime).slice(0, slice), e => e.startTime.slice(0, 10)); // TODO: remove slice perf hack!!!
 
     return (
-      <View className='events' hAlignContent='center' grow onScroll={onScroll} style={{ overflow: 'auto' }}>
+      <View className='events' hAlignContent='center' grow onScroll={onScroll}>
         <View column>
           <div className='events-container' ref={r => { this.container = r; }}>
-            <View shrink={false}>
-              <label>My Places Events</label>
-              <label>Nearby Events</label>
+            <View shrink={false} className='tabs'>
+              <div
+                className={cx('tab', { 'is-selected': view === EVENTS_VIEW })}
+                onClick={() => transitionTo(EVENTS_VIEW)}
+              >
+                My Places Events
+              </div>
+              <div
+                className={cx('tab', { 'is-selected': view === NEARBY_VIEW })}
+                onClick={() => transitionTo(NEARBY_VIEW)}
+              >
+                Nearby Events
+              </div>
             </View>
             {Object.keys(eventsByDate).map(k => (
               <View column shrink={false} key={k}>

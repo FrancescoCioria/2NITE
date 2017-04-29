@@ -13,7 +13,7 @@ export default class Event extends React.Component {
     name: t.String,
     description: t.maybe(t.String),
     startTime: t.String,
-    endTime: t.String,
+    endTime: t.maybe(t.String),
     cover: t.interface({
       id: t.String,
       source: t.maybe(t.String)
@@ -43,7 +43,7 @@ export default class Event extends React.Component {
   templateModal({ name, description, onDismiss, cover, id }) {
     return (
       <Modal className='event-modal' onDismiss={onDismiss} title={name}>
-        <img className='image' src={cover.source || `https://graph.facebook.com/${id}/picture?access_token=963390470430059|bGCaVUpEO9xur5e05TOFQdF7uUY&type=large`} />
+        <img className='image' alt='cover' src={cover.source || `https://graph.facebook.com/${id}/picture?access_token=963390470430059|bGCaVUpEO9xur5e05TOFQdF7uUY&type=large`} />
         <FormattedText>
           {description}
         </FormattedText>
@@ -59,7 +59,9 @@ export default class Event extends React.Component {
     const endDateTime = new Date(endTime);
 
     const startTimeLabel = `${this.pad2(startDateTime.getHours())}:${this.pad2(startDateTime.getMinutes())}`;
-    const endTimeLabel = `${this.pad2(endDateTime.getHours())}:${this.pad2(endDateTime.getMinutes())}`;
+    const endTimeLabel = endTime ?
+      `${this.pad2(endDateTime.getHours())}:${this.pad2(endDateTime.getMinutes())}` :
+      'N/A';
 
     return (
       <View className='event' basis={200}>

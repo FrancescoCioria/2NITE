@@ -2,6 +2,7 @@ import React from 'react';
 import debounce from 'lodash/debounce';
 import flatten from 'lodash/flatten';
 import sortBy from 'lodash/sortBy';
+import uniqBy from 'lodash/uniqBy';
 import View from 'react-flexview';
 import { t } from 'tcomb-react';
 import { get } from './request';
@@ -92,7 +93,7 @@ export default class App extends React.Component {
         }))
         .filter(e => new Date(e.startTime) > today);
 
-      this.setState({ events });
+      this.setState({ events: uniqBy(events, 'id') });
     });
   }
 
@@ -122,7 +123,7 @@ export default class App extends React.Component {
           }
         }));
 
-        this.setState({ nearbyEvents });
+        this.setState({ nearbyEvents: uniqBy(nearbyEvents, 'id') });
       });
     });
   }
@@ -172,13 +173,15 @@ export default class App extends React.Component {
           <EventsPage
             places={places}
             events={filterEvents(view === NEARBY_VIEW ? nearbyEvents : events, searchQuery)}
+            transitionTo={transitionTo}
+            view={view}
           />
         )}
       </View>
     );
   }
 
-  componentWillReceiveProps(nextProps, nextState) {
+  shouldComponentUpdate(nextProps, nextState) {
     if (nextState.view !== NEARBY_VIEW && this.state.view === NEARBY_VIEW) {
       this.setState({
         nearbyEvents: null
@@ -186,5 +189,7 @@ export default class App extends React.Component {
     } else if (nextState.view === NEARBY_VIEW && this.state.view !== NEARBY_VIEW) {
       this.getNearbyEvents();
     }
+
+    return true;
   }
 }
