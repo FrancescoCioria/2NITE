@@ -40,9 +40,10 @@ export default class Event extends React.Component {
     this.setState({ showModal: false });
   }
 
-  templateModal({ name, description, onDismiss }) {
+  templateModal({ name, description, onDismiss, cover, id }) {
     return (
       <Modal className='event-modal' onDismiss={onDismiss} title={name}>
+        <img className='image' src={cover.source || `https://graph.facebook.com/${id}/picture?access_token=963390470430059|bGCaVUpEO9xur5e05TOFQdF7uUY&type=large`} />
         <FormattedText>
           {description}
         </FormattedText>
@@ -62,7 +63,7 @@ export default class Event extends React.Component {
 
     return (
       <View className='event' basis={200}>
-        {showModal && this.templateModal({ name, description, onDismiss: this.closeModal })}
+        {showModal && this.templateModal({ name, description, onDismiss: this.closeModal, cover, id })}
         <View shrink={false}>
           <div
             className='image'
