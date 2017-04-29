@@ -182,11 +182,7 @@ export default class App extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (nextState.view !== NEARBY_VIEW && this.state.view === NEARBY_VIEW) {
-      this.setState({
-        nearbyEvents: null
-      });
-    } else if (nextState.view === NEARBY_VIEW && this.state.view !== NEARBY_VIEW) {
+    if (!this.state.nearbyEvents && nextState.view === NEARBY_VIEW && this.state.view !== NEARBY_VIEW) {
       this.getNearbyEvents();
     }
 
