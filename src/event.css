@@ -56,43 +56,12 @@
   cursor: pointer;
 }
 
-.event-modal .modal-header {
-  overflow: auto;
-  font-size: 18px;
-  line-height: 24px;
-  font-weight: 400;
-}
-
-.event-modal .modal-body {
-  overflow: auto;
-  font-size: 18px;
-  line-height: 24px;
-  font-weight: 400;
-  color: rgba(0, 0, 0, 0.870588);
-}
-
-.event-modal .modal-body p {
+.modal.event-modal .modal-body {
   font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
 }
 
-.event-modal .centered-content-wrapper {
-  margin: 30px;
-}
-
-.event-modal .modal-content {
-  min-width: 0;
-}
-
-.event-modal.modal .modal-content .modal-header .modal-title {
-  margin-right: 10px;
-}
-
-.event-modal .modal-icon-close > svg {
-  height: 20px;
-  width: 20px;
-  margin: 10px;
+.modal.event-modal .modal-body a {
+  color: #0366d6;
 }
 
 @media (max-width: 600px) {
