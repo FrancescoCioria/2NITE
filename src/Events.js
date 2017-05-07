@@ -23,10 +23,10 @@ class Events extends React.Component {
       description: t.maybe(t.String),
       startTime: t.String,
       endTime: t.maybe(t.String),
-      place: t.struct({
+      place: t.maybe(t.struct({
         id: t.maybe(t.String),
         name: t.String
-      })
+      }))
     })),
     view: t.String,
     transitionTo: t.Function

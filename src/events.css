@@ -20,3 +20,9 @@
 .events .tabs .tab:hover {
   color: #ce7812;
 }
+
+@media (max-width: 600px) {
+  .events .tabs {
+    margin-left: 16px;
+  }
+}

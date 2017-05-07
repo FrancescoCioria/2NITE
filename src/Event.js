@@ -18,10 +18,10 @@ export default class Event extends React.Component {
       id: t.String,
       source: t.maybe(t.String)
     }),
-    place: t.struct({
+    place: t.maybe(t.struct({
       id: t.maybe(t.String),
       name: t.String
-    })
+    }))
   });
 
   state = {
@@ -82,8 +82,8 @@ export default class Event extends React.Component {
           </View>
           <View className='place'>
             {`${startTimeLabel} - ${endTimeLabel} @`}
-            <a href={`https://www.facebook.com/${place.id}/`} target='_blank'>
-              {` ${place.name}`}
+            <a href={place ? `https://www.facebook.com/${place.id}/` : ''} target='_blank'>
+              {` ${place ? place.name : 'N/A'}`}
             </a>
           </View>
           <View className='description' onClick={this.openModal}>

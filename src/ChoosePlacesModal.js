@@ -42,7 +42,7 @@ export default class ChoosePlacesModal extends React.Component {
     return (
       <View className='added-places' column grow>
         {places.map(p => (
-          <View className='added-place' shrink={false}>
+          <View className='added-place' shrink={false} key={p.value}>
             {p.label}
             <View className='remove' marginLeft='auto' onClick={() => onRemovePlace(p)}>
               Remove
