@@ -27,11 +27,23 @@ export default class DateHeader extends React.Component {
     ][index];
   }
 
+  getDayOfWeekShort(index) {
+    return [
+      'Dom',
+      'Lun',
+      'Mar',
+      'Mer',
+      'Gio',
+      'Ven',
+      'Sab'
+    ][index];
+  }
+
   render() {
     const { date } = this.props;
     return (
       <View className='date-header' shrink={false}>
-        {`${date.getDate()} ${this.getMonthShort(date.getMonth())}`}
+        {`${this.getDayOfWeekShort(date.getDay())} ${date.getDate()} ${this.getMonthShort(date.getMonth())}`}
       </View>
     );
   }
