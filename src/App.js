@@ -181,7 +181,7 @@ export default class App extends React.Component {
   filterEvents = (events, searchQuery) => {
     if (events && searchQuery) {
       const searchQueries = searchQuery.toLowerCase().split(' ').filter(s => s.length > 0);
-      return events.filter(e => !!searchQueries.find(s => `${e.name}${e.place ? e.place.name : ''}`.toLowerCase().indexOf(s) !== -1));
+      return events.filter(e => !!searchQueries.find(s => `${e.name}${e.place ? e.place.name : ''}${e.description || ''}`.toLowerCase().indexOf(s) !== -1));
     }
 
     return events;
