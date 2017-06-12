@@ -4,12 +4,15 @@ import flatten from 'lodash/flatten';
 import sortBy from 'lodash/sortBy';
 import uniqBy from 'lodash/uniqBy';
 import View from 'react-flexview';
+import { TimerToast } from 'buildo-react-components/lib/toaster';
+import TextOverflow from 'buildo-react-components/lib/text-overflow';
 import { t } from 'tcomb-react';
 import { get } from './request';
 import EventSearch from './eventsSearch';
 import EventsPage from './EventsPage';
 import WelcomePage from './WelcomePage';
 import PlacesHeader from './PlacesHeader';
+import Toaster from './Toaster';
 
 import 'buildo-normalize-css';
 import 'buildo-normalize-css/fullscreenApp.css';
@@ -32,7 +35,8 @@ export default class App extends React.Component {
     nearbyEvents: null,
     events: null,
     places: null,
-    searchQuery: null
+    searchQuery: null,
+    toasts: []
   }
 
   componentDidMount() {
@@ -106,26 +110,60 @@ export default class App extends React.Component {
         accessToken: '963390470430059|bGCaVUpEO9xur5e05TOFQdF7uUY'
       });
 
-      es.search().then(data => {
-        const nearbyEvents = data.events.map(e => ({
-          id: e.id,
-          name: e.name,
-          description: e.description,
-          startTime: e.startTime,
-          endTime: e.endTime,
-          cover: {
-            id: '',
-            source: e.coverPicture
-          },
-          place: {
-            id: e.venue.id,
-            name: e.venue.name
-          }
-        }));
+      es.search()
+        .then(data => {
+          const nearbyEvents = data.events.map(e => ({
+            id: e.id,
+            name: e.name,
+            description: e.description,
+            startTime: e.startTime,
+            endTime: e.endTime,
+            cover: {
+              id: '',
+              source: e.coverPicture
+            },
+            place: {
+              id: e.venue.id,
+              name: e.venue.name
+            }
+          }));
 
-        this.setState({ nearbyEvents: uniqBy(nearbyEvents, 'id') });
+          this.setState({ nearbyEvents: uniqBy(nearbyEvents, 'id') });
+        })
+        .catch(this.pushError);
+    }, this.pushError);
+  }
+
+  pushError = (error) => {
+    const toastStyle = {
+      backgroundColor: '#feeced',
+      color: '#fb242c',
+      border: '1px solid #fb242c',
+      height: 50,
+      padding: 20,
+      borderRadius: 4,
+      marginTop: 10,
+      marginRight: 20
+    };
+
+    const key = String(Math.random());
+
+    const onTimeout = key => {
+      this.setState({
+        toasts: this.state.toasts.filter(t => t.key !== key)
       });
-    });
+    };
+
+    const toast = (
+      <TimerToast onTimeout={onTimeout} duration={5000} key={key}>
+        <View vAlignContent='center' style={toastStyle}>
+          <TextOverflow label={error.message} />
+        </View>
+      </TimerToast>
+    );
+
+    this.setState({ toasts: [toast].concat(this.state.toasts) });
+    this.transitionTo(EVENTS_VIEW);
   }
 
   onAddPlaces = places => {
@@ -155,7 +193,7 @@ export default class App extends React.Component {
 
   render() {
     const {
-      state: { places, events, nearbyEvents, searchQuery, view },
+      state: { places, events, nearbyEvents, searchQuery, view, toasts },
       onAddPlaces, onSearch, filterEvents, transitionTo
     } = this;
 
@@ -177,6 +215,9 @@ export default class App extends React.Component {
             view={view}
           />
         )}
+        <Toaster>
+          {toasts}
+        </Toaster>
       </View>
     );
   }
