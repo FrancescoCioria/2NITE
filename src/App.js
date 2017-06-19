@@ -3,6 +3,7 @@ import debounce from 'lodash/debounce';
 import flatten from 'lodash/flatten';
 import sortBy from 'lodash/sortBy';
 import uniqBy from 'lodash/uniqBy';
+import every from 'lodash/every';
 import View from 'react-flexview';
 import { TimerToast } from 'buildo-react-components/lib/toaster';
 import TextOverflow from 'buildo-react-components/lib/text-overflow';
@@ -183,7 +184,7 @@ export default class App extends React.Component {
   filterEvents = (events, searchQuery) => {
     if (events && searchQuery) {
       const searchQueries = searchQuery.toLowerCase().split(' ').filter(s => s.length > 0);
-      return events.filter(e => !!searchQueries.find(s => `${e.name}${e.place ? e.place.name : ''}${e.description || ''}`.toLowerCase().indexOf(s) !== -1));
+      return events.filter(e => every(searchQueries, s => `${e.name}${e.place ? e.place.name : ''}${e.description || ''}`.toLowerCase().indexOf(s) !== -1));
     }
 
     return events;
