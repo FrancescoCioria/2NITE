@@ -8,6 +8,7 @@
 
 .event .content {
   padding: 16px;
+  position: relative;
 }
 
 .event .image {
@@ -55,6 +56,20 @@
   overflow: hidden;
   cursor: pointer;
 }
+
+.event .content .pin {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  padding: 10px;
+  color: rgba(0, 0, 0, .25);
+}
+
+.event .content .pin.pinned {
+  color: #fd9319;
+}
+
 
 .modal.event-modal .modal-body {
   font-size: 16px;

@@ -22,16 +22,26 @@ export default class EventsPage extends React.Component {
         name: t.String
       }))
     }))),
+    pinnedEventIds: t.list(t.String),
     view: t.String,
-    transitionTo: t.Function
+    transitionTo: t.Function,
+    onPin: t.Function
   });
 
-  templateByPlace({ events, transitionTo, view }) {
-    return <Events events={events} transitionTo={transitionTo} view={view} />;
+  templateByPlace({ events, transitionTo, view, onPin, pinnedEventIds }) {
+    return (
+      <Events
+        events={events}
+        transitionTo={transitionTo}
+        view={view}
+        onPin={onPin}
+        pinnedEventIds={pinnedEventIds}
+      />
+    );
   }
 
   render() {
-    const { places, events, transitionTo, view } = this.props;
+    const { places, events, transitionTo, view, onPin, pinnedEventIds } = this.props;
 
     const ready = !!places && !!events;
     return (
@@ -41,7 +51,7 @@ export default class EventsPage extends React.Component {
             <Placeholder />
           </View>
         )}
-        {ready && this.templateByPlace({ events, transitionTo, view })}
+        {ready && this.templateByPlace({ events, transitionTo, view, onPin, pinnedEventIds })}
       </View>
     );
   }

@@ -26,12 +26,14 @@ const savedPlacesIds = localStorage.getItem('savedPlacesIds') ? localStorage.get
 const WELCOME_VIEW = 'welcome_view';
 const EVENTS_VIEW = 'events_view';
 const NEARBY_VIEW = 'nearby_view';
+const PINNED_VIEW = 'pinned_view';
 
 export default class App extends React.Component {
 
   state = {
     savedPlacesIds,
     view: !savedPlacesIds ? WELCOME_VIEW : EVENTS_VIEW,
+    pinnedEventIds: (localStorage.getItem('pinnedEventIds') || '').split(','),
     nearbyEvents: null,
     events: null,
     places: null,
@@ -191,10 +193,38 @@ export default class App extends React.Component {
     view !== this.state.view && this.setState({ view });
   }
 
+  onPin = (eventId) => {
+    const { pinnedEventIds, events } = this.state;
+
+    const eventIds = events.map(e => e.id);
+    const cleanedPinnedEventIds = pinnedEventIds.filter(eId => eventIds.indexOf(eId) !== -1);
+
+    const isAlreadyPinned = pinnedEventIds.indexOf(eventId) !== -1;
+
+    const newPinnedEventIds = isAlreadyPinned ?
+      cleanedPinnedEventIds.filter(eId => eId !== eventId) :
+      cleanedPinnedEventIds.concat(eventId);
+
+    localStorage.setItem('pinnedEventIds', newPinnedEventIds.join(','));
+    this.setState({
+      pinnedEventIds: newPinnedEventIds
+    });
+  }
+
+  getCurrentViewEvents = () => {
+    const { events, nearbyEvents, pinnedEventIds, view } = this.state;
+
+    switch (view) {
+      case EVENTS_VIEW: return events;
+      case NEARBY_VIEW: return nearbyEvents;
+      case PINNED_VIEW: return events.filter(e => pinnedEventIds.indexOf(e.id) !== -1 );
+    }
+  }
+
   render() {
     const {
-      state: { places, events, nearbyEvents, searchQuery, view, toasts },
-      onAddPlaces, onSearch, filterEvents, transitionTo
+      state: { places, searchQuery, view, toasts, pinnedEventIds },
+      onAddPlaces, onSearch, filterEvents, transitionTo, onPin, getCurrentViewEvents
     } = this;
 
     return (
@@ -210,9 +240,11 @@ export default class App extends React.Component {
         {view !== WELCOME_VIEW && (
           <EventsPage
             places={places}
-            events={filterEvents(view === NEARBY_VIEW ? nearbyEvents : events, searchQuery)}
+            events={filterEvents(getCurrentViewEvents(), searchQuery)}
+            pinnedEventIds={pinnedEventIds}
             transitionTo={transitionTo}
             view={view}
+            onPin={onPin}
           />
         )}
         <Toaster>

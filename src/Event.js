@@ -1,5 +1,6 @@
 import React from 'react';
 import { t, propTypes } from 'tcomb-react';
+import cx from 'classnames';
 import View from 'react-flexview';
 import FormattedText from 'buildo-react-components/lib/formatted-text';
 import Modal from './Modal';
@@ -21,7 +22,9 @@ export default class Event extends React.Component {
     place: t.maybe(t.struct({
       id: t.maybe(t.String),
       name: t.String
-    }))
+    })),
+    pinned: t.Boolean,
+    onPin: t.Function
   });
 
   state = {
@@ -52,7 +55,7 @@ export default class Event extends React.Component {
   }
 
   render() {
-    const { name, id, place, description, startTime, endTime, cover } = this.props;
+    const { name, id, place, description, startTime, endTime, cover, onPin, pinned } = this.props;
     const { showModal } = this.state;
 
     const startDateTime = new Date(startTime);
@@ -75,7 +78,8 @@ export default class Event extends React.Component {
           />
         </View>
         <View grow column className='content'>
-          <View className='title'>
+          <i className={cx('fa fa-thumb-tack pin', { pinned })} aria-hidden='true' onClick={() => onPin(id)} />
+          <View className='title' width='100%'>
             <a href={`https://www.facebook.com/events/${id}/`} target='_blank'>
               {name}
             </a>

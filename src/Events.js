@@ -13,6 +13,7 @@ import './events.css';
 
 const EVENTS_VIEW = 'events_view';
 const NEARBY_VIEW = 'nearby_view';
+const PINNED_VIEW = 'pinned_view';
 
 class Events extends React.Component {
 
@@ -28,8 +29,10 @@ class Events extends React.Component {
         name: t.String
       }))
     })),
+    pinnedEventIds: t.list(t.String),
     view: t.String,
-    transitionTo: t.Function
+    transitionTo: t.Function,
+    onPin: t.Function
   })
 
   state = {
@@ -52,7 +55,7 @@ class Events extends React.Component {
 
   render() {
     const {
-      props: { events, transitionTo, view },
+      props: { events, transitionTo, view, onPin, pinnedEventIds },
       state: { slice },
       _onScroll: onScroll
     } = this;
@@ -76,11 +79,19 @@ class Events extends React.Component {
               >
                 Nearby Events
               </div>
+              <div
+                className={cx('tab', { 'is-selected': view === PINNED_VIEW })}
+                onClick={() => transitionTo(PINNED_VIEW)}
+              >
+                Pinned Events
+              </div>
             </View>
             {Object.keys(eventsByDate).map(k => (
               <View column shrink={false} key={k}>
                 {<DateHeader date={new Date(k)} />}
-                {eventsByDate[k].map(e => <Event {...e} key={e.id} />)}
+                {eventsByDate[k].map(e => (
+                  <Event {...e} key={e.id} onPin={onPin} pinned={pinnedEventIds.indexOf(e.id) !== -1}/>
+                ))}
               </View>
             ))}
           </div>
