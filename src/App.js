@@ -7,8 +7,8 @@ import every from 'lodash/every';
 import View from 'react-flexview';
 import { TimerToast } from 'buildo-react-components/lib/toaster';
 import TextOverflow from 'buildo-react-components/lib/text-overflow';
-import { t } from 'tcomb-react';
-import { get } from './request';
+import { t, propTypes } from 'tcomb-react';
+import { get, getPreferences, updatePreferences } from './request';
 import EventSearch from './eventsSearch';
 import EventsPage from './EventsPage';
 import WelcomePage from './WelcomePage';
@@ -22,8 +22,6 @@ import './app.css';
 
 t.interface.strict = true;
 
-const savedPlacesIds = localStorage.getItem('savedPlacesIds') ? localStorage.getItem('savedPlacesIds').split(',') : null;
-
 const WELCOME_VIEW = 'welcome_view';
 const EVENTS_VIEW = 'events_view';
 const NEARBY_VIEW = 'nearby_view';
@@ -31,10 +29,22 @@ const PINNED_VIEW = 'pinned_view';
 
 export default class App extends React.Component {
 
+  static propTypes = propTypes({
+    authResponse: t.maybe(t.interface({
+      accessToken: t.String,
+      userID: t.String,
+      expiresIn: t.Integer,
+      signedRequest: t.Any
+    })),
+    savedPlacesIds: t.maybe(t.list(t.String)),
+    pinnedEventIds: t.maybe(t.list(t.String))
+  })
+
   state = {
-    savedPlacesIds,
-    view: !savedPlacesIds ? WELCOME_VIEW : EVENTS_VIEW,
-    pinnedEventIds: (localStorage.getItem('pinnedEventIds') || '').split(','),
+    savedPlacesIds: this.props.savedPlacesIds,
+    authResponse: this.props.authResponse,
+    view: !this.props.authResponse || !this.props.savedPlacesIds ? WELCOME_VIEW : EVENTS_VIEW,
+    pinnedEventIds: this.props.pinnedEventIds,
     nearbyEvents: null,
     events: null,
     places: null,
@@ -171,12 +181,27 @@ export default class App extends React.Component {
 
   onAddPlaces = places => {
     const savedPlacesIds = places.map(p => p.value);
+    this.savePlaces(savedPlacesIds);
+  }
 
-    localStorage.setItem('savedPlacesIds', savedPlacesIds.join(','));
+  savePlaces = (savedPlacesIds) => {
+    updatePreferences(this.state.authResponse.userID, savedPlacesIds, this.state.pinnedEventIds);
     this.setState({ savedPlacesIds, view: EVENTS_VIEW }, () => {
       this.getPlaces();
       this.getEvents();
     });
+  }
+
+  onLogin = authResponse => {
+    if (authResponse) {
+      getPreferences(authResponse.userID).then(preferences => {
+        this.setState({
+          authResponse
+        }, () => {
+          preferences.savedPlacesIds && this.savePlaces(preferences.savedPlacesIds);
+        });
+      });
+    }
   }
 
   onSearch = debounce(searchQuery => this.setState({ searchQuery }), 300)
@@ -206,7 +231,7 @@ export default class App extends React.Component {
       cleanedPinnedEventIds.filter(eId => eId !== eventId) :
       cleanedPinnedEventIds.concat(eventId);
 
-    localStorage.setItem('pinnedEventIds', newPinnedEventIds.join(','));
+    updatePreferences(this.state.authResponse.userID, this.state.savedPlacesIds, newPinnedEventIds);
     this.setState({
       pinnedEventIds: newPinnedEventIds
     });
@@ -224,13 +249,13 @@ export default class App extends React.Component {
 
   render() {
     const {
-      state: { places, searchQuery, view, toasts, pinnedEventIds },
-      onAddPlaces, onSearch, filterEvents, transitionTo, onPin, getCurrentViewEvents
+      state: { places, searchQuery, view, toasts, pinnedEventIds, authResponse },
+      onAddPlaces, onLogin, onSearch, filterEvents, transitionTo, onPin, getCurrentViewEvents
     } = this;
 
     return (
       <View className='app' hAlignContent='center'>
-        {view === WELCOME_VIEW && <WelcomePage onAddPlaces={onAddPlaces} />}
+        {view === WELCOME_VIEW && <WelcomePage onLogin={onLogin} onAddPlaces={onAddPlaces} isLogged={!!authResponse} />}
         {view !== WELCOME_VIEW && (
           <PlacesHeader
             places={places || []}
