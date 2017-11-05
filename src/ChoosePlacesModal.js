@@ -33,7 +33,7 @@ export default class ChoosePlacesModal extends React.Component {
   onRemovePlace = (p) => this.setState({ places: this.state.places.filter(place => place.value !== p.value) })
 
   searchPlaces(input) {
-    return get('https://graph.facebook.com/search', { q: input, type: 'place' }, false);
+    return get('https://graph.facebook.com/search', { q: input, type: 'page' }, false);
   }
 
   onSave = () => this.props.onSave(this.state.places);
