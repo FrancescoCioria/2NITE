@@ -5,7 +5,7 @@ import App from './App';
 
 const appNode = document.getElementById('app');
 
-window.fbAsyncInit = function() {
+const fbAsyncInit = function() {
   window.FB.init({
     appId: '219909391458551',
     cookie: true,  // enable cookies to allow the server to access
@@ -29,3 +29,9 @@ window.fbAsyncInit = function() {
       });
   });
 };
+
+if (!window.FB) {
+  window.fbAsyncInit = fbAsyncInit;
+} else {
+  fbAsyncInit();
+}
