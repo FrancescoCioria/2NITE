@@ -43,6 +43,12 @@ export default class ChoosePlacesModal extends React.Component {
       <View className='added-places' column grow>
         {places.map(p => (
           <View className='added-place' shrink={false} key={p.value}>
+            <img
+              height={30}
+              width={30}
+              style={{ marginRight: 10 }}
+              src={`http://graph.facebook.com/${p.value}/picture?type=square`}
+            />
             {p.label}
             <View className='remove' marginLeft='auto' onClick={() => onRemovePlace(p)}>
               Remove
@@ -53,10 +59,25 @@ export default class ChoosePlacesModal extends React.Component {
     );
   }
 
+  optionRenderer = (option) => {
+    return (
+      <View vAlignContent='center'>
+        {option.label}
+        <img
+          height={30}
+          width={30}
+          style={{ marginLeft: 'auto' }}
+          src={`http://graph.facebook.com/${option.value}/picture?type=square`}
+        />
+      </View>
+    );
+  }
+
   render() {
     const {
       state: { places },
       props: { onDismiss, buttonLabel },
+      optionRenderer,
       onAddPlace,
       onRemovePlace,
       onSave
@@ -74,7 +95,7 @@ export default class ChoosePlacesModal extends React.Component {
 
     return (
       <Modal className='choose-places-modal' onDismiss={onDismiss} title='Choose your places'>
-        <Dropdown.Async loadOptions={loadOptions} onChange={onAddPlace} />
+        <Dropdown.Async loadOptions={loadOptions} onChange={onAddPlace} optionRenderer={optionRenderer} />
         {this.templateAddedPlaces({ places, onRemovePlace })}
         <button onClick={onSave} disabled={!places || places.length === 0}>
           {buttonLabel}
