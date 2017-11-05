@@ -20,7 +20,7 @@ export const get = (uri, qs, getAll = true) => {
 export const getPreferences = userId => {
   return fetch('https://jsonblob.com/api/jsonBlob/79a9f907-c23f-11e7-ae0d-6b2a6474f4cc')
     .then(res => res.json())
-    .then(json => json[userId]);
+    .then(json => json[userId] || {});
 };
 
 export const updatePreferences = (userId, savedPlacesIds = [], pinnedEventIds = []) => {
