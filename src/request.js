@@ -17,24 +17,61 @@ export const get = (uri, qs, getAll = true) => {
   );
 };
 
+let userDataId = null;
 export const getPreferences = userId => {
-  return fetch('https://jsonblob.com/api/jsonBlob/79a9f907-c23f-11e7-ae0d-6b2a6474f4cc')
-    .then(res => res.json())
-    .then(json => json[userId] || {});
-};
-
-export const updatePreferences = (userId, savedPlacesIds = [], pinnedEventIds = []) => {
-  return fetch('https://jsonblob.com/api/jsonBlob/79a9f907-c23f-11e7-ae0d-6b2a6474f4cc')
+  return fetch('https://api.airtable.com/v0/appdkslzk5QlO95EW/2NITE?api_key=keyRXab9tyXiaFoAd')
     .then(res => res.json())
     .then(json => {
-      request({
-        method: 'PUT',
-        uri: 'https://jsonblob.com/api/jsonBlob/79a9f907-c23f-11e7-ae0d-6b2a6474f4cc',
-        body: {
-          ...json,
-          [userId]: { savedPlacesIds, pinnedEventIds }
-        },
-        json: true
-      });
+      const userData = json.records.find(r => r.fields.UserId === userId);
+      if (userData) {
+        userDataId = userData.id;
+        return {
+          savedPlacesIds: JSON.parse(userData.fields.Pages || '[]'),
+          pinnedEventIds: JSON.parse(userData.fields.Pinned || '[]')
+        };
+      }
+      return {};
     });
+};
+
+export const updatePlaces = (userId, savedPlacesIds) => {
+  request({
+    method: 'PATCH',
+    uri: `https://api.airtable.com/v0/appdkslzk5QlO95EW/2NITE/${userDataId}?api_key=keyRXab9tyXiaFoAd`,
+    body: {
+      fields: {
+        Pages: JSON.stringify(savedPlacesIds)
+      }
+    },
+    json: true
+  });
+};
+
+export const updatePinned = (userId, pinnedEventIds) => {
+  request({
+    method: 'PATCH',
+    uri: `https://api.airtable.com/v0/appdkslzk5QlO95EW/2NITE/${userDataId}?api_key=keyRXab9tyXiaFoAd`,
+    body: {
+      fields: {
+        Pinned: JSON.stringify(pinnedEventIds)
+      }
+    },
+    json: true
+  });
+};
+
+export const createUser = (userId, savedPlacesIds) => {
+  request({
+    method: 'POST',
+    uri: 'https://api.airtable.com/v0/appdkslzk5QlO95EW/2NITE?api_key=keyRXab9tyXiaFoAd',
+    body: {
+      fields: {
+        UserId: userId,
+        Pages: JSON.stringify(savedPlacesIds)
+      }
+    },
+    json: true
+  }).then(res => {
+    userDataId = res.id;
+  });
 };

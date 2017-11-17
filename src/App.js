@@ -8,7 +8,7 @@ import View from 'react-flexview';
 import { TimerToast } from 'buildo-react-components/lib/toaster';
 import TextOverflow from 'buildo-react-components/lib/text-overflow';
 import { t, propTypes } from 'tcomb-react';
-import { get, getPreferences, updatePreferences } from './request';
+import { get, getPreferences, createUser, updatePlaces, updatePinned } from './request';
 import EventSearch from './eventsSearch';
 import EventsPage from './EventsPage';
 import WelcomePage from './WelcomePage';
@@ -181,11 +181,17 @@ export default class App extends React.Component {
 
   onAddPlaces = places => {
     const savedPlacesIds = places.map(p => p.value);
+    updatePlaces(this.state.authResponse.userID, savedPlacesIds);
+    this.savePlaces(savedPlacesIds);
+  }
+
+  onAddPlacesFirstTime = places => {
+    const savedPlacesIds = places.map(p => p.value);
+    createUser(this.state.authResponse.userID, savedPlacesIds);
     this.savePlaces(savedPlacesIds);
   }
 
   savePlaces = (savedPlacesIds) => {
-    updatePreferences(this.state.authResponse.userID, savedPlacesIds, this.state.pinnedEventIds);
     this.setState({ savedPlacesIds, view: EVENTS_VIEW }, () => {
       this.getPlaces();
       this.getEvents();
@@ -231,7 +237,7 @@ export default class App extends React.Component {
       cleanedPinnedEventIds.filter(eId => eId !== eventId) :
       cleanedPinnedEventIds.concat(eventId);
 
-    updatePreferences(this.state.authResponse.userID, this.state.savedPlacesIds, newPinnedEventIds);
+    updatePinned(this.state.authResponse.userID, newPinnedEventIds);
     this.setState({
       pinnedEventIds: newPinnedEventIds
     });
@@ -249,13 +255,13 @@ export default class App extends React.Component {
 
   render() {
     const {
-      state: { places, searchQuery, view, toasts, pinnedEventIds, authResponse },
-      onAddPlaces, onLogin, onSearch, filterEvents, transitionTo, onPin, getCurrentViewEvents
+      state: { places, searchQuery, view, toasts, pinnedEventIds = [], authResponse },
+      onAddPlaces, onAddPlacesFirstTime, onLogin, onSearch, filterEvents, transitionTo, onPin, getCurrentViewEvents
     } = this;
 
     return (
       <View className='app' hAlignContent='center'>
-        {view === WELCOME_VIEW && <WelcomePage onLogin={onLogin} onAddPlaces={onAddPlaces} isLogged={!!authResponse} />}
+        {view === WELCOME_VIEW && <WelcomePage onLogin={onLogin} onAddPlaces={onAddPlacesFirstTime} isLogged={!!authResponse} />}
         {view !== WELCOME_VIEW && (
           <PlacesHeader
             places={places || []}
