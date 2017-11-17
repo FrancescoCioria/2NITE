@@ -22,7 +22,7 @@ export const getPreferences = userId => {
   return fetch('https://api.airtable.com/v0/appdkslzk5QlO95EW/2NITE?api_key=keyRXab9tyXiaFoAd')
     .then(res => res.json())
     .then(json => {
-      const userData = json.records.find(r => r.fields.UserId === userId);
+      const userData = json.records.filter(r => r.fields.UserId === userId)[0];
       if (userData) {
         userDataId = userData.id;
         return {
