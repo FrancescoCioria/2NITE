@@ -55,20 +55,10 @@ export default class App extends React.Component {
   componentDidMount() {
     const { view } = this.state;
 
-    switch (view) {
-      case EVENTS_VIEW:
-        this.getPlaces();
-        this.getEvents();
-        break;
-
-      case NEARBY_VIEW:
-        this.getPlaces();
-        this.getNearbyEvents();
-        break;
-
-      case WELCOME_VIEW:
-      default:
-        break;
+    if (view === EVENTS_VIEW) {
+      this.getPlaces();
+      this.getEvents();
+      this.getNearbyEvents();
     }
   }
 
@@ -296,11 +286,4 @@ export default class App extends React.Component {
     );
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (!this.state.nearbyEvents && nextState.view === NEARBY_VIEW && this.state.view !== NEARBY_VIEW) {
-      this.getNearbyEvents();
-    }
-
-    return true;
-  }
 }
