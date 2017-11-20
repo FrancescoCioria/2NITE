@@ -17,6 +17,7 @@ html {
 
 .app .body,
 .app .events-container {
+  width: 100vw;
   max-width: 960px;
   padding: 0 40px;
 }

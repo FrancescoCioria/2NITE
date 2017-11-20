@@ -67,7 +67,7 @@ class Events extends React.Component {
 
     return (
       <View className='events' hAlignContent='center' grow onScroll={onScroll}>
-        <View column grow>
+        <View column>
           <div className='events-container' ref={r => { this.container = r; }}>
             <View shrink={false} className='tabs'>
               <div
