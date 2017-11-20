@@ -21,8 +21,20 @@
   color: #ce7812;
 }
 
+.show-only-pinned {
+  color: #fd9319;
+}
+
 @media (max-width: 600px) {
   .events .tabs {
     margin-left: 16px;
+    margin-right: 10px;
+  }
+
+  .events .tabs .tab {
+    height: 48px;
+    width: 85px;
+    text-align: center;
+    line-height: 20px;
   }
 }

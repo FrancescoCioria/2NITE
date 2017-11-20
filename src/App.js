@@ -25,7 +25,6 @@ t.interface.strict = true;
 const WELCOME_VIEW = 'welcome_view';
 const EVENTS_VIEW = 'events_view';
 const NEARBY_VIEW = 'nearby_view';
-const PINNED_VIEW = 'pinned_view';
 
 export default class App extends React.Component {
 
@@ -49,7 +48,8 @@ export default class App extends React.Component {
     events: null,
     places: null,
     searchQuery: null,
-    toasts: []
+    toasts: [],
+    pinnedOnly: false
   }
 
   componentDidMount() {
@@ -244,19 +244,27 @@ export default class App extends React.Component {
   }
 
   getCurrentViewEvents = () => {
-    const { events, nearbyEvents, pinnedEventIds, view } = this.state;
+    const { events, nearbyEvents, pinnedEventIds, view, pinnedOnly } = this.state;
 
-    switch (view) {
-      case EVENTS_VIEW: return events;
-      case NEARBY_VIEW: return nearbyEvents;
-      case PINNED_VIEW: return events.filter(e => pinnedEventIds.indexOf(e.id) !== -1 );
-    }
+    const _events = (() => {
+      switch (view) {
+        case EVENTS_VIEW: return events;
+        case NEARBY_VIEW: return nearbyEvents;
+      }
+    })();
+
+    return pinnedOnly && _events ? _events.filter(e => pinnedEventIds.indexOf(e.id) !== -1 ) : _events;
+  }
+
+  toggleOnlyPinned = (pinnedOnly) => {
+    this.setState({ pinnedOnly });
   }
 
   render() {
     const {
-      state: { places, searchQuery, view, toasts, pinnedEventIds = [], authResponse },
-      onAddPlaces, onAddPlacesFirstTime, onLogin, onSearch, filterEvents, transitionTo, onPin, getCurrentViewEvents
+      state: { places, searchQuery, view, toasts, pinnedEventIds = [], authResponse, pinnedOnly },
+      onAddPlaces, onAddPlacesFirstTime, onLogin, onSearch, filterEvents, transitionTo,
+      onPin, getCurrentViewEvents, toggleOnlyPinned
     } = this;
 
     return (
@@ -277,6 +285,8 @@ export default class App extends React.Component {
             transitionTo={transitionTo}
             view={view}
             onPin={onPin}
+            toggleOnlyPinned={toggleOnlyPinned}
+            pinnedOnly={pinnedOnly}
           />
         )}
         <Toaster>

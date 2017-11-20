@@ -6,6 +6,7 @@ import groupBy from 'lodash/groupBy';
 import sortBy from 'lodash/sortBy';
 import { t, propTypes } from 'tcomb-react';
 import View from 'react-flexview';
+import Toggle from './Toggle';
 import DateHeader from './DateHeader';
 import Event from './Event';
 
@@ -13,7 +14,6 @@ import './events.css';
 
 const EVENTS_VIEW = 'events_view';
 const NEARBY_VIEW = 'nearby_view';
-const PINNED_VIEW = 'pinned_view';
 
 class Events extends React.Component {
 
@@ -29,6 +29,8 @@ class Events extends React.Component {
         name: t.String
       }))
     })),
+    toggleOnlyPinned: t.Function,
+    pinnedOnly: t.Boolean,
     pinnedEventIds: t.list(t.String),
     view: t.String,
     transitionTo: t.Function,
@@ -55,16 +57,17 @@ class Events extends React.Component {
 
   render() {
     const {
-      props: { events, transitionTo, view, onPin, pinnedEventIds },
+      props: { events, transitionTo, view, onPin, pinnedEventIds, toggleOnlyPinned, pinnedOnly },
       state: { slice },
       _onScroll: onScroll
     } = this;
 
     const eventsByDate = groupBy(sortBy(events, e => e.startTime).slice(0, slice), e => e.startTime.slice(0, 10)); // TODO: remove slice perf hack!!!
+    const keys = Object.keys(eventsByDate);
 
     return (
       <View className='events' hAlignContent='center' grow onScroll={onScroll}>
-        <View column>
+        <View column grow>
           <div className='events-container' ref={r => { this.container = r; }}>
             <View shrink={false} className='tabs'>
               <div
@@ -79,21 +82,21 @@ class Events extends React.Component {
               >
                 Nearby Events
               </div>
-              <div
-                className={cx('tab', { 'is-selected': view === PINNED_VIEW })}
-                onClick={() => transitionTo(PINNED_VIEW)}
-              >
-                Pinned Events
-              </div>
-            </View>
-            {Object.keys(eventsByDate).map(k => (
-              <View column shrink={false} key={k}>
-                {<DateHeader date={new Date(k)} />}
-                {eventsByDate[k].map(e => (
-                  <Event {...e} key={e.id} onPin={onPin} pinned={pinnedEventIds.indexOf(e.id) !== -1}/>
-                ))}
+              <View className='show-only-pinned' marginLeft='auto' shrink={false} vAlignContent='center'>
+                <Toggle onChange={toggleOnlyPinned} value={pinnedOnly} />
+                <span style={{ marginLeft: 5 }}>Only pinned</span>
               </View>
-            ))}
+            </View>
+            {keys.length > 0 ?
+              keys.map(k => (
+                <View column shrink={false} key={k}>
+                  {<DateHeader date={new Date(k)} />}
+                  {eventsByDate[k].map(e => (
+                    <Event {...e} key={e.id} onPin={onPin} pinned={pinnedEventIds.indexOf(e.id) !== -1}/>
+                  ))}
+                </View>
+              )) : <View marginTop={100} hAlignContent='center'>No results</View>
+            }
           </div>
         </View>
       </View>
