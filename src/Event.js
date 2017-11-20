@@ -72,7 +72,7 @@ export default class Event extends React.Component {
       'N/A';
 
     return (
-      <View className='event' basis={200} onClick={this.openModal}>
+      <View className='event' basis={200}>
         {showModal && this.templateModal({ name, description, onDismiss: this.closeModal, cover, id })}
         <View shrink={false}>
           <div
@@ -95,7 +95,7 @@ export default class Event extends React.Component {
               {` ${place ? place.name : 'N/A'}`}
             </a>
           </View>
-          <View className='description'>
+          <View className='description' onClick={this.openModal}>
             {description}
           </View>
         </View>
