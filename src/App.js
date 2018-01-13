@@ -78,15 +78,20 @@ export default class App extends React.Component {
   getEvents() {
     const { savedPlacesIds } = this.state;
 
-    const today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-    const todayString = [
-      today.getFullYear(),
-      this.pad2(today.getMonth() + 1),
-      this.pad2(today.getDate())
+    const stillNight = new Date().getHours() < 7 || true;
+
+    const since = stillNight ?
+      new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - 1, 20) :
+      new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+
+    const sinceString = [
+      since.getFullYear(),
+      this.pad2(since.getMonth() + 1),
+      this.pad2(since.getDate())
     ].join('-');
 
     const eventsRequest = savedPlacesIds.map(v => get(`https://graph.facebook.com/${v}/events`, {
-      since: todayString,
+      since: sinceString,
       fields: 'cover.fields(id,source), id, name, description, place, start_time, end_time'
     }));
 
@@ -94,11 +99,13 @@ export default class App extends React.Component {
       const flattenEvents = flatten(eventsResponse.map(r => r.data));
       const events = flattenEvents
         .map(({ start_time, end_time, ...e }) => ({
+          // safe defaults
+          cover: { id: '', source: '' },
           ...e,
           startTime: start_time,
           endTime: end_time
         }))
-        .filter(e => new Date(e.startTime) > today);
+        .filter(e => new Date(e.endTime) > new Date());
 
       this.setState({ events: uniqBy(events, 'id') });
     });
