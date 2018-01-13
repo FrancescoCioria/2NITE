@@ -250,9 +250,11 @@ export default class App extends React.Component {
   onSwiped = (eventId) => {
     const { dismissedEventIds, events } = this.state;
 
-    updateDismissed(this.state.authResponse.userID, dismissedEventIds.concat(eventId));
+    const cleanedDismissedEventIds = dismissedEventIds.filter(eId => eventIds.indexOf(eId) !== -1);
+
+    updateDismissed(this.state.authResponse.userID, cleanedDismissedEventIds.concat(eventId));
     this.setState({
-      dismissedEventIds: dismissedEventIds.concat(eventId)
+      dismissedEventIds: cleanedDismissedEventIds.concat(eventId)
     });
   }
 
