@@ -8,7 +8,7 @@ import View from 'react-flexview';
 import { TimerToast } from 'buildo-react-components/lib/toaster';
 import TextOverflow from 'buildo-react-components/lib/text-overflow';
 import { t, propTypes } from 'tcomb-react';
-import { get, getPreferences, createUser, updatePlaces, updatePinned } from './request';
+import { get, getPreferences, createUser, updatePlaces, updatePinned, updateDismissed } from './request';
 import EventSearch from './eventsSearch';
 import EventsPage from './EventsPage';
 import WelcomePage from './WelcomePage';
@@ -36,7 +36,8 @@ export default class App extends React.Component {
       signedRequest: t.Any
     })),
     savedPlacesIds: t.maybe(t.list(t.String)),
-    pinnedEventIds: t.maybe(t.list(t.String))
+    pinnedEventIds: t.maybe(t.list(t.String)),
+    dismissedEventIds: t.maybe(t.list(t.String)),
   })
 
   state = {
@@ -44,6 +45,7 @@ export default class App extends React.Component {
     authResponse: this.props.authResponse,
     view: !this.props.authResponse || !this.props.savedPlacesIds ? WELCOME_VIEW : EVENTS_VIEW,
     pinnedEventIds: this.props.pinnedEventIds,
+    dismissedEventIds: this.props.dismissedEventIds,
     nearbyEvents: null,
     events: null,
     places: null,
@@ -210,9 +212,14 @@ export default class App extends React.Component {
   onSearch = debounce(searchQuery => this.setState({ searchQuery }), 300)
 
   filterEvents = (events, searchQuery) => {
+    const { dismissedEventIds } = this.state
     if (events && searchQuery) {
       const searchQueries = searchQuery.toLowerCase().split(' ').filter(s => s.length > 0);
-      return events.filter(e => every(searchQueries, s => `${e.name}${e.place ? e.place.name : ''}${e.description || ''}`.toLowerCase().indexOf(s) !== -1));
+      return events
+        .filter(e => every(searchQueries, s => `${e.name}${e.place ? e.place.name : ''}${e.description || ''}`.toLowerCase().indexOf(s) !== -1))
+        .filter(e => every(dismissedEventIds, dismissedEventId => dismissedEventId !== e.id))
+    } else if (events) {
+      return events.filter(e => every(dismissedEventIds, dismissedEventId => dismissedEventId !== e.id));
     }
 
     return events;
@@ -240,6 +247,15 @@ export default class App extends React.Component {
     });
   }
 
+  onSwiped = (eventId) => {
+    const { dismissedEventIds, events } = this.state;
+
+    updateDismissed(this.state.authResponse.userID, dismissedEventIds.concat(eventId));
+    this.setState({
+      dismissedEventIds: dismissedEventIds.concat(eventId)
+    });
+  }
+
   getCurrentViewEvents = () => {
     const { events, nearbyEvents, pinnedEventIds, view, pinnedOnly } = this.state;
 
@@ -261,7 +277,7 @@ export default class App extends React.Component {
     const {
       state: { places, searchQuery, view, toasts, pinnedEventIds = [], authResponse, pinnedOnly },
       onAddPlaces, onAddPlacesFirstTime, onLogin, onSearch, filterEvents, transitionTo,
-      onPin, getCurrentViewEvents, toggleOnlyPinned
+      onPin, getCurrentViewEvents, toggleOnlyPinned, onSwiped
     } = this;
 
     return (
@@ -282,6 +298,7 @@ export default class App extends React.Component {
             transitionTo={transitionTo}
             view={view}
             onPin={onPin}
+            onSwiped={onSwiped}
             toggleOnlyPinned={toggleOnlyPinned}
             pinnedOnly={pinnedOnly}
           />

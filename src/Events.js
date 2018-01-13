@@ -1,7 +1,7 @@
 import React from 'react';
+import debounce from 'lodash/debounce';
 import cx from 'classnames';
 import pure from 'buildo-react-pure';
-import debounce from 'lodash/debounce';
 import groupBy from 'lodash/groupBy';
 import sortBy from 'lodash/sortBy';
 import { t, propTypes } from 'tcomb-react';
@@ -34,7 +34,8 @@ class Events extends React.Component {
     pinnedEventIds: t.list(t.String),
     view: t.String,
     transitionTo: t.Function,
-    onPin: t.Function
+    onPin: t.Function,
+    onSwiped: t.Function
   })
 
   state = {
@@ -57,8 +58,8 @@ class Events extends React.Component {
 
   render() {
     const {
-      props: { events, transitionTo, view, onPin, pinnedEventIds, toggleOnlyPinned, pinnedOnly },
-      state: { slice },
+      props: { events, transitionTo, view, onPin, onSwiped, pinnedEventIds, toggleOnlyPinned, pinnedOnly },
+      state: { slice, style },
       _onScroll: onScroll
     } = this;
 
@@ -92,7 +93,7 @@ class Events extends React.Component {
                 <View column shrink={false} key={k}>
                   {<DateHeader date={new Date(k)} />}
                   {eventsByDate[k].map(e => (
-                    <Event {...e} key={e.id} onPin={onPin} pinned={pinnedEventIds.indexOf(e.id) !== -1}/>
+                    <Event {...e} key={e.id} onSwiped={onSwiped} onPin={onPin} pinned={pinnedEventIds.indexOf(e.id) !== -1}/>
                   ))}
                 </View>
               )) : <View marginTop={100} hAlignContent='center'>No results</View>

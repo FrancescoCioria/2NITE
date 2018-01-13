@@ -1,4 +1,6 @@
 import React from 'react';
+import debounce from 'lodash/debounce';
+import Swipeable from 'react-swipeable'
 import { t, propTypes } from 'tcomb-react';
 import cx from 'classnames';
 import View from 'react-flexview';
@@ -24,7 +26,8 @@ export default class Event extends React.Component {
       name: t.String
     })),
     pinned: t.Boolean,
-    onPin: t.Function
+    onPin: t.Function,
+    onSwiped: t.Function
   });
 
   state = {
@@ -59,8 +62,34 @@ export default class Event extends React.Component {
     );
   }
 
+  onSwipingLeft = debounce((e, absX) => {
+    if (this.ref) {
+      this.ref.style.transform = `translate3d(${-absX}px, 0, 0)`
+      this.ref.style.opacity = 1 - (Math.abs(absX) / 200)
+      this.ref.style.transition = 'none'
+    }
+  }, 10)
+
+  onSwipingRight = debounce((e, absX) => {
+    if (this.ref) {
+      this.ref.style.transform = `translate3d(${absX}px, 0, 0)`
+      this.ref.style.opacity = 1 - (Math.abs(absX) / 200)
+      this.ref.style.transition = 'none'
+    }
+  }, 10)
+
+  onSwiped = (e, deltaX, isFlick, velocity) => {
+    if (isFlick) {
+      this.props.onSwiped(this.props.id)
+    } else {
+      this.ref.style.transform = 'translate3d(0, 0, 0)';
+      this.ref.style.opacity = 1
+      this.ref.style.transition = ''
+    }
+  }
+
   render() {
-    const { name, id, place, description, startTime, endTime, cover, onPin, pinned } = this.props;
+    const { name, id, place, description, startTime, endTime, cover, onPin, pinned, style } = this.props;
     const { showModal } = this.state;
 
     const startDateTime = new Date(startTime);
@@ -72,7 +101,15 @@ export default class Event extends React.Component {
       'N/A';
 
     return (
-      <View className='event' basis={200}>
+      <Swipeable
+        className='event'
+        style={{ display: 'flex', flex: '0 0 200px' }}
+        onSwipingLeft={this.onSwipingLeft}
+        onSwipingRight={this.onSwipingRight}
+        onSwipedLeft={this.onSwiped}
+        onSwipedRight={this.onSwiped}
+        innerRef={ref => this.ref = ref}
+      >
         {showModal && this.templateModal({ name, description, onDismiss: this.closeModal, cover, id })}
         <View shrink={false}>
           <div
@@ -99,7 +136,7 @@ export default class Event extends React.Component {
             {description}
           </View>
         </View>
-      </View>
+      </Swipeable>
     );
   }
 }

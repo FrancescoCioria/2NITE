@@ -23,6 +23,7 @@ const fbAsyncInit = function() {
             authResponse={authResponse}
             savedPlacesIds={preferences.savedPlacesIds}
             pinnedEventIds={preferences.pinnedEventIds}
+            dismissedEventIds={preferences.dismissedEventIds}
           />,
           appNode
         );

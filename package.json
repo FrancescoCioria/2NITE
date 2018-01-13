@@ -15,6 +15,7 @@
     "react-flexview": "^1.0.4",
     "react-placeholder": "^1.0.1",
     "react-select": "^1.0.0-rc.3",
+    "react-swipeable": "^4.2.0",
     "request-promise": "^4.2.0",
     "tcomb-react": "^0.9.3"
   },
