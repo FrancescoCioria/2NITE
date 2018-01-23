@@ -22,6 +22,10 @@
   color: #ce7812;
 }
 
+.sticky-wrapper * {
+  transition: none;
+}
+
 .show-only-pinned {
   color: #fd9319;
 }

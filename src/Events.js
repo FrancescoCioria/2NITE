@@ -6,6 +6,8 @@ import groupBy from 'lodash/groupBy';
 import sortBy from 'lodash/sortBy';
 import { t, propTypes } from 'tcomb-react';
 import View from 'react-flexview';
+import { Sticky } from 'react-sticky';
+import StickyContainer from './StickyContainer';
 import Toggle from './Toggle';
 import DateHeader from './DateHeader';
 import Event from './Event';
@@ -90,12 +92,20 @@ class Events extends React.Component {
             </View>
             {keys.length > 0 ?
               keys.map(k => (
-                <View column shrink={false} key={k}>
-                  {<DateHeader date={new Date(k)} />}
+                <StickyContainer style={{ display: 'flex', flex: '0 0 auto', flexDirection: 'column' }} key={k}>
+                  <div style={{ height: 144 }} className='sticky-wrapper'>
+                    <Sticky>
+                      {({ style, isSticky }) => (
+                        <div style={{ ...style, background: '#F7F7F7', zIndex: 10 }}>
+                          <DateHeader date={new Date(k)} />
+                        </div>
+                      )}
+                    </Sticky>
+                  </div>
                   {eventsByDate[k].map(e => (
                     <Event {...e} key={e.id} onSwiped={onSwiped} onPin={onPin} pinned={pinnedEventIds.indexOf(e.id) !== -1}/>
                   ))}
-                </View>
+                </StickyContainer>
               )) : <View marginTop={100} hAlignContent='center'>No results</View>
             }
           </div>

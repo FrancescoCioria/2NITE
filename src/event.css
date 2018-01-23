@@ -4,6 +4,7 @@
   border-radius: 2px;
   overflow: hidden;
   background: white;
+  margin: 0 5px;
 }
 
 .event .content {
@@ -89,6 +90,8 @@
     flex: 0 0 auto !important;
     border-radius: 0 !important;
     margin-bottom: 10px;
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .event .image {

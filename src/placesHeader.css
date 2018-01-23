@@ -1,6 +1,7 @@
 .places-header {
   position: fixed;
   top: 0;
+  z-index: 11;
   background: #24292e;
   /*background: #f5f5f5;*/
   border-bottom: 1px solid black;
