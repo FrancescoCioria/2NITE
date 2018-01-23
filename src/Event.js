@@ -89,7 +89,7 @@ export default class Event extends React.Component {
   }
 
   render() {
-    const { name, id, place, description, startTime, endTime, cover, onPin, pinned, style } = this.props;
+    const { name, id, place, description, startTime, endTime, cover, onPin, pinned } = this.props;
     const { showModal } = this.state;
 
     const startDateTime = new Date(startTime);

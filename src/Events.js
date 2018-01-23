@@ -59,7 +59,7 @@ class Events extends React.Component {
   render() {
     const {
       props: { events, transitionTo, view, onPin, onSwiped, pinnedEventIds, toggleOnlyPinned, pinnedOnly },
-      state: { slice, style },
+      state: { slice },
       _onScroll: onScroll
     } = this;
 

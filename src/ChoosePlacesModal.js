@@ -48,6 +48,7 @@ export default class ChoosePlacesModal extends React.Component {
               width={30}
               style={{ marginRight: 10 }}
               src={`https://graph.facebook.com/${p.value}/picture?type=square`}
+              alt='event cover'
             />
             {p.label}
             <View className='remove' marginLeft='auto' onClick={() => onRemovePlace(p)}>
@@ -68,6 +69,7 @@ export default class ChoosePlacesModal extends React.Component {
           width={30}
           style={{ marginLeft: 'auto' }}
           src={`https://graph.facebook.com/${option.value}/picture?type=square`}
+          alt='place logo'
         />
       </View>
     );

@@ -250,6 +250,7 @@ export default class App extends React.Component {
   onSwiped = (eventId) => {
     const { dismissedEventIds, events } = this.state;
 
+    const eventIds = events.map(e => e.id);
     const cleanedDismissedEventIds = dismissedEventIds.filter(eId => eventIds.indexOf(eId) !== -1);
 
     updateDismissed(this.state.authResponse.userID, cleanedDismissedEventIds.concat(eventId));
@@ -265,6 +266,7 @@ export default class App extends React.Component {
       switch (view) {
         case EVENTS_VIEW: return events;
         case NEARBY_VIEW: return nearbyEvents;
+        default: return null;
       }
     })();
 
