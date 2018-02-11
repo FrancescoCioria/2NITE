@@ -80,7 +80,7 @@ export default class App extends React.Component {
   getEvents() {
     const { savedPlacesIds } = this.state;
 
-    const stillNight = new Date().getHours() < 7 || true;
+    const stillNight = new Date().getHours() < 7;
 
     const since = stillNight ?
       new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - 1, 20) :
