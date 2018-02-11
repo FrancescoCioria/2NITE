@@ -1,10 +1,13 @@
 .event {
   box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px;
-  margin-top: 25px;
   border-radius: 2px;
   overflow: hidden;
   background: white;
-  margin: 0 5px;
+  margin: 25px 5px 0;
+}
+
+.event:nth-child(2) {
+  margin-top: 45px;
 }
 
 .event .content {

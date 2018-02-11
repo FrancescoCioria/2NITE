@@ -91,21 +91,24 @@ class Events extends React.Component {
               </View>
             </View>
             {keys.length > 0 ?
-              keys.map(k => (
-                <StickyContainer style={{ display: 'flex', flex: '0 0 auto', flexDirection: 'column' }} key={k}>
-                  <div style={{ height: 144 }} className='sticky-wrapper'>
-                    <Sticky>
-                      {({ style, isSticky }) => (
-                        <div style={{ ...style, background: '#F7F7F7', zIndex: 10 }}>
-                          <DateHeader date={new Date(k)} />
-                        </div>
-                      )}
-                    </Sticky>
-                  </div>
-                  {eventsByDate[k].map(e => (
-                    <Event {...e} key={e.id} onSwiped={onSwiped} onPin={onPin} pinned={pinnedEventIds.indexOf(e.id) !== -1}/>
-                  ))}
-                </StickyContainer>
+              keys.map((k, index) => (
+                <View column>
+                  <StickyContainer style={{ display: 'flex', flex: '0 0 auto', flexDirection: 'column' }} key={k}>
+                    <div style={{ height: 54 }} className='sticky-wrapper'>
+                      <Sticky topOffset={-50}>
+                        {({ style, isSticky }) => (
+                          <div className={cx({ 'is-sticky': isSticky, 'was-sticky': isSticky && style.top !== 0 })} style={{ ...style, top: style.top + 50 }}>
+                            <DateHeader date={new Date(k)} />
+                          </div>
+                        )}
+                      </Sticky>
+                    </div>
+                    {eventsByDate[k].map(e => (
+                      <Event {...e} key={e.id} onSwiped={onSwiped} onPin={onPin} pinned={pinnedEventIds.indexOf(e.id) !== -1}/>
+                    ))}
+                  </StickyContainer>
+                  <View height={50} />
+                </View>
               )) : <View marginTop={100} hAlignContent='center'>No results</View>
             }
           </div>
