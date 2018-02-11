@@ -8,6 +8,7 @@
     "buildo-react-components": "^0.21.0",
     "buildo-react-pure": "^1.0.1",
     "classnames": "^2.2.5",
+    "local-date": "^2.0.1",
     "lodash": "^4.17.4",
     "prop-types": "^15.5.8",
     "react": "^15.5.4",

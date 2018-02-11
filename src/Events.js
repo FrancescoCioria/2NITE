@@ -5,6 +5,7 @@ import pure from 'buildo-react-pure';
 import groupBy from 'lodash/groupBy';
 import sortBy from 'lodash/sortBy';
 import { t, propTypes } from 'tcomb-react';
+import LocalDate from 'local-date';
 import View from 'react-flexview';
 import { Sticky } from 'react-sticky';
 import StickyContainer from './StickyContainer';
@@ -101,7 +102,7 @@ class Events extends React.Component {
                             className={cx({ 'is-sticky': isSticky, 'was-sticky': isSticky && style.top !== 0 })}
                             style={{ ...style, top: typeof style.top !== 'undefined' ? style.top + 50 : undefined }}
                           >
-                            <DateHeader date={new Date(k)} />
+                            <DateHeader date={new LocalDate(k)} />
                           </div>
                         )}
                       </Sticky>
