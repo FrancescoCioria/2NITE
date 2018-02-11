@@ -92,12 +92,15 @@ class Events extends React.Component {
             </View>
             {keys.length > 0 ?
               keys.map((k, index) => (
-                <View column>
-                  <StickyContainer style={{ display: 'flex', flex: '0 0 auto', flexDirection: 'column' }} key={k}>
+                <View column key={k}>
+                  <StickyContainer style={{ display: 'flex', flex: '0 0 auto', flexDirection: 'column' }}>
                     <div style={{ height: 54 }} className='sticky-wrapper'>
                       <Sticky topOffset={-50}>
                         {({ style, isSticky }) => (
-                          <div className={cx({ 'is-sticky': isSticky, 'was-sticky': isSticky && style.top !== 0 })} style={{ ...style, top: style.top + 50 }}>
+                          <div
+                            className={cx({ 'is-sticky': isSticky, 'was-sticky': isSticky && style.top !== 0 })}
+                            style={{ ...style, top: typeof style.top !== 'undefined' ? style.top + 50 : undefined }}
+                          >
                             <DateHeader date={new Date(k)} />
                           </div>
                         )}

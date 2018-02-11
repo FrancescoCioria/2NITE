@@ -10,32 +10,32 @@ export default class DateHeader extends React.Component {
     date: t.Date
   });
 
-  getMonthShort(index) {
+  getMonth(index) {
     return [
-      'Gen',
-      'Feb',
-      'Mar',
-      'Apr',
-      'Mag',
-      'Giu',
-      'Lug',
-      'Ago',
-      'Set',
-      'Ott',
-      'Nov',
-      'Dic'
+      'Gennaio',
+      'Febbraio',
+      'Marzo',
+      'Aprile',
+      'Maggio',
+      'Giugno',
+      'Luglio',
+      'Agosto',
+      'Settembre',
+      'Ottobre',
+      'Novembre',
+      'Dicembre'
     ][index];
   }
 
-  getDayOfWeekShort(index) {
+  getDayOfWeek(index) {
     return [
-      'Dom',
-      'Lun',
-      'Mar',
-      'Mer',
-      'Gio',
-      'Ven',
-      'Sab'
+      'Domenica',
+      'Lunedì',
+      'Martedì',
+      'Mercoledì',
+      'Giovedì',
+      'Venerdì',
+      'Sabato'
     ][index];
   }
 
@@ -43,7 +43,8 @@ export default class DateHeader extends React.Component {
     const { date } = this.props;
     return (
       <View className='date-header' shrink={false}>
-        {`${this.getDayOfWeekShort(date.getDay())} ${date.getDate()} ${this.getMonthShort(date.getMonth())}`}
+        <span className='day-of-week'>{this.getDayOfWeek(date.getDay())}</span>
+        <span className='date'>{`· ${date.getDate()} ${this.getMonth(date.getMonth())}`}</span>
       </View>
     );
   }
