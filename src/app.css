@@ -48,7 +48,6 @@ button {
   color: white;
   display: block;
   font-size: 17px;
-  font-weight: 400;
   height: 44px;
   padding: 0;
   width: 318px;
@@ -68,6 +67,10 @@ button:disabled {
 
 button:disabled {
   cursor: not-allowed;
+}
+
+* {
+  font-weight: 100;
 }
 
 @media (max-width: 600px) {
