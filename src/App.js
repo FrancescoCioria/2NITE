@@ -26,6 +26,10 @@ const WELCOME_VIEW = 'welcome_view';
 const EVENTS_VIEW = 'events_view';
 const NEARBY_VIEW = 'nearby_view';
 
+function values(o) {
+  return Object.keys(o).map(k => o[k])
+}
+
 export default class App extends React.Component {
 
   static propTypes = propTypes({
@@ -70,10 +74,15 @@ export default class App extends React.Component {
 
   getPlaces() {
     const { savedPlacesIds } = this.state;
-    const placesRequest = savedPlacesIds.map(v => get(`https://graph.facebook.com/${v}`));
 
-    Promise.all(placesRequest).then(placesResponse => {
-      this.setState({ places: sortBy(placesResponse, p => p.name.toLowerCase()) });
+    const placesRequest = get('https://graph.facebook.com/v2.7/', {
+      ids: savedPlacesIds.join(',')
+    })
+
+    placesRequest.then(placesResponse => {
+      this.setState({
+        places: sortBy(values(placesResponse), p => p.name.toLowerCase())
+      });
     });
   }
 
@@ -92,13 +101,14 @@ export default class App extends React.Component {
       this.pad2(since.getDate())
     ].join('-');
 
-    const eventsRequest = savedPlacesIds.map(v => get(`https://graph.facebook.com/${v}/events`, {
-      since: sinceString,
-      fields: 'cover.fields(id,source), id, name, description, place, start_time, end_time'
-    }));
+    const eventsRequest = get('https://graph.facebook.com/v2.7/', {
+      ids: savedPlacesIds.join(','),
+      fields: `events.fields(cover.fields(id,source), id, name, description, place, start_time, end_time).since(${sinceString})`
+    })
 
-    Promise.all(eventsRequest).then(eventsResponse => {
-      const flattenEvents = flatten(eventsResponse.map(r => r.data));
+    eventsRequest.then(eventsResponse => {
+      const flattenEvents = flatten(values(eventsResponse).filter(r => r.events).map(r => r.events.data));
+
       const events = flattenEvents
         .map(({ start_time, end_time, ...e }) => ({
           // safe defaults
