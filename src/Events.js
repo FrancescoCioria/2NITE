@@ -34,10 +34,8 @@ class Events extends React.Component {
     })),
     toggleOnlyPinned: t.Function,
     pinnedOnly: t.Boolean,
-    pinnedEventIds: t.list(t.String),
     view: t.String,
     transitionTo: t.Function,
-    onPin: t.Function,
     onSwiped: t.Function,
     onRSVPChange: t.Function
   })
@@ -62,7 +60,7 @@ class Events extends React.Component {
 
   render() {
     const {
-      props: { events, transitionTo, view, onPin, onSwiped, pinnedEventIds, toggleOnlyPinned, pinnedOnly, onRSVPChange },
+      props: { events, transitionTo, view, onSwiped, toggleOnlyPinned, pinnedOnly, onRSVPChange },
       state: { slice },
       _onScroll: onScroll
     } = this;
@@ -109,7 +107,7 @@ class Events extends React.Component {
                       </Sticky>
                     </div>
                     {eventsByDate[k].map(e => (
-                      <Event {...e} key={e.id} onSwiped={onSwiped} onRSVPChange={onRSVPChange} onPin={onPin} pinned={pinnedEventIds.indexOf(e.id) !== -1}/>
+                      <Event {...e} key={e.id} onSwiped={onSwiped} onRSVPChange={onRSVPChange} />
                     ))}
                   </StickyContainer>
                   <View height={50} />

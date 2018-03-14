@@ -26,8 +26,6 @@ export default class Event extends React.Component {
       id: t.maybe(t.String),
       name: t.String
     })),
-    pinned: t.Boolean,
-    onPin: t.Function,
     rsvpStatus: t.maybe(t.String),
     onSwiped: t.Function,
     onRSVPChange: t.Function
@@ -118,7 +116,7 @@ export default class Event extends React.Component {
   }
 
   render() {
-    const { name, id, place, description, startTime, endTime, cover, onPin, pinned, rsvpStatus } = this.props;
+    const { name, id, place, description, startTime, endTime, cover, rsvpStatus } = this.props;
     const { showModal } = this.state;
 
     const startDateTime = new Date(startTime);
@@ -149,7 +147,7 @@ export default class Event extends React.Component {
           />
         </View>
         <View grow column className='content'>
-          <i className={cx('fa fa-thumb-tack pin', { pinned: pinned || rsvpStatus === 'attending' || rsvpStatus === 'unsure' })} aria-hidden='true' onClick={() => onPin(id)} />
+          <i className={cx('fa fa-thumb-tack pin', { pinned: rsvpStatus === 'attending' || rsvpStatus === 'unsure' })} aria-hidden='true' />
           <View className='title' width='100%'>
             <a href={`https://www.facebook.com/events/${id}/`} target='_blank'>
               {name}

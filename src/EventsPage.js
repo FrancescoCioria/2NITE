@@ -24,23 +24,19 @@ export default class EventsPage extends React.Component {
     }))),
     toggleOnlyPinned: t.Function,
     pinnedOnly: t.Boolean,
-    pinnedEventIds: t.list(t.String),
     view: t.String,
     transitionTo: t.Function,
-    onPin: t.Function,
     onSwiped: t.Function,
     onRSVPChange: t.Function
   });
 
-  templateByPlace({ events, transitionTo, view, onPin, onSwiped, pinnedEventIds, toggleOnlyPinned, pinnedOnly, onRSVPChange }) {
+  templateByPlace({ events, transitionTo, view, onSwiped, toggleOnlyPinned, pinnedOnly, onRSVPChange }) {
     return (
       <Events
         events={events}
         transitionTo={transitionTo}
         view={view}
-        onPin={onPin}
         onSwiped={onSwiped}
-        pinnedEventIds={pinnedEventIds}
         toggleOnlyPinned={toggleOnlyPinned}
         pinnedOnly={pinnedOnly}
         onRSVPChange={onRSVPChange}
@@ -49,7 +45,7 @@ export default class EventsPage extends React.Component {
   }
 
   render() {
-    const { places, events, transitionTo, view, onPin, onSwiped, pinnedEventIds, toggleOnlyPinned, pinnedOnly, onRSVPChange } = this.props;
+    const { places, events, transitionTo, view, onSwiped, toggleOnlyPinned, pinnedOnly, onRSVPChange } = this.props;
 
     const ready = !!places && !!events;
     return (
@@ -59,7 +55,7 @@ export default class EventsPage extends React.Component {
             <Placeholder />
           </View>
         )}
-        {ready && this.templateByPlace({ events, transitionTo, view, onPin, onSwiped, pinnedEventIds, toggleOnlyPinned, pinnedOnly, onRSVPChange })}
+        {ready && this.templateByPlace({ events, transitionTo, view, onSwiped, toggleOnlyPinned, pinnedOnly, onRSVPChange })}
       </View>
     );
   }

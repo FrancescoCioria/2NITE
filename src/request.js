@@ -28,7 +28,6 @@ export const getPreferences = userId => {
         userDataId = userData.id;
         return {
           savedPlacesIds: JSON.parse(userData.fields.Pages || '[]'),
-          pinnedEventIds: JSON.parse(userData.fields.Pinned || '[]'),
           dismissedEventIds: JSON.parse(userData.fields.Dismissed || '[]')
         };
       }
@@ -43,19 +42,6 @@ export const updatePlaces = (userId, savedPlacesIds) => {
     body: {
       fields: {
         Pages: JSON.stringify(savedPlacesIds)
-      }
-    },
-    json: true
-  });
-};
-
-export const updatePinned = (userId, pinnedEventIds) => {
-  request({
-    method: 'PATCH',
-    uri: `https://api.airtable.com/v0/appdkslzk5QlO95EW/2NITE/${userDataId}?api_key=${config.airTableApiKey}`,
-    body: {
-      fields: {
-        Pinned: JSON.stringify(pinnedEventIds)
       }
     },
     json: true

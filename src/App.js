@@ -8,7 +8,7 @@ import View from 'react-flexview';
 import { TimerToast } from 'buildo-react-components/lib/toaster';
 import TextOverflow from 'buildo-react-components/lib/text-overflow';
 import { t, propTypes } from 'tcomb-react';
-import { get as _get, getPreferences, createUser, updatePlaces, updatePinned, updateDismissed } from './request';
+import { get as _get, getPreferences, createUser, updatePlaces, updateDismissed } from './request';
 import EventSearch from './eventsSearch';
 import EventsPage from './EventsPage';
 import WelcomePage from './WelcomePage';
@@ -40,7 +40,6 @@ export default class App extends React.Component {
       signedRequest: t.Any
     })),
     savedPlacesIds: t.maybe(t.list(t.String)),
-    pinnedEventIds: t.maybe(t.list(t.String)),
     dismissedEventIds: t.maybe(t.list(t.String)),
   })
 
@@ -48,7 +47,6 @@ export default class App extends React.Component {
     savedPlacesIds: this.props.savedPlacesIds,
     authResponse: this.props.authResponse,
     view: !this.props.authResponse || !this.props.savedPlacesIds ? WELCOME_VIEW : EVENTS_VIEW,
-    pinnedEventIds: this.props.pinnedEventIds,
     dismissedEventIds: this.props.dismissedEventIds,
     nearbyEvents: null,
     events: null,
@@ -244,24 +242,6 @@ export default class App extends React.Component {
     view !== this.state.view && this.setState({ view });
   }
 
-  onPin = (eventId) => {
-    const { pinnedEventIds, events } = this.state;
-
-    const eventIds = events.map(e => e.id);
-    const cleanedPinnedEventIds = pinnedEventIds.filter(eId => eventIds.indexOf(eId) !== -1);
-
-    const isAlreadyPinned = pinnedEventIds.indexOf(eventId) !== -1;
-
-    const newPinnedEventIds = isAlreadyPinned ?
-      cleanedPinnedEventIds.filter(eId => eId !== eventId) :
-      cleanedPinnedEventIds.concat(eventId);
-
-    updatePinned(this.state.authResponse.userID, newPinnedEventIds);
-    this.setState({
-      pinnedEventIds: newPinnedEventIds
-    });
-  }
-
   onSwiped = (eventId) => {
     const { dismissedEventIds, events } = this.state;
 
@@ -275,7 +255,7 @@ export default class App extends React.Component {
   }
 
   getCurrentViewEvents = () => {
-    const { events, nearbyEvents, pinnedEventIds, view, pinnedOnly } = this.state;
+    const { events, nearbyEvents, view, pinnedOnly } = this.state;
 
     const _events = (() => {
       switch (view) {
@@ -285,7 +265,7 @@ export default class App extends React.Component {
       }
     })();
 
-    return pinnedOnly && _events ? _events.filter(e => e.rsvpStatus === 'attending' || e.rsvpStatus === 'unsure' || pinnedEventIds.indexOf(e.id) !== -1 ) : _events;
+    return pinnedOnly && _events ? _events.filter(e => e.rsvpStatus === 'attending' || e.rsvpStatus === 'unsure' ) : _events;
   }
 
   toggleOnlyPinned = (pinnedOnly) => {
@@ -317,9 +297,9 @@ export default class App extends React.Component {
 
   render() {
     const {
-      state: { places, searchQuery, view, toasts, pinnedEventIds = [], authResponse, pinnedOnly },
+      state: { places, searchQuery, view, toasts, authResponse, pinnedOnly },
       onAddPlaces, onAddPlacesFirstTime, onLogin, onSearch, filterEvents, transitionTo,
-      onPin, getCurrentViewEvents, toggleOnlyPinned, onSwiped, onRSVPChange
+      getCurrentViewEvents, toggleOnlyPinned, onSwiped, onRSVPChange
     } = this;
 
     return (
@@ -336,10 +316,8 @@ export default class App extends React.Component {
           <EventsPage
             places={places}
             events={filterEvents(getCurrentViewEvents(), searchQuery)}
-            pinnedEventIds={pinnedEventIds}
             transitionTo={transitionTo}
             view={view}
-            onPin={onPin}
             onSwiped={onSwiped}
             toggleOnlyPinned={toggleOnlyPinned}
             pinnedOnly={pinnedOnly}
