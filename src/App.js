@@ -107,19 +107,20 @@ export default class App extends React.Component {
 
     const eventsRequest = this.get({
       ids: [this.state.authResponse.userID].concat(savedPlacesIds).join(','),
-      fields: `events.fields(cover.fields(id,source), id, name, description, place, start_time, end_time).since(${sinceString})`
+      fields: `events.fields(cover.fields(id,source), id, name, description, place, start_time, end_time, rsvp_status).since(${sinceString})`
     })
 
     eventsRequest.then(eventsResponse => {
       const flattenEvents = flatten(values(eventsResponse).filter(r => r.events).map(r => r.events.data));
 
       const events = flattenEvents
-        .map(({ start_time, end_time, ...e }) => ({
+        .map(({ start_time, end_time, rsvp_status, ...e }) => ({
           // safe defaults
           cover: { id: '', source: '' },
           ...e,
           startTime: start_time,
-          endTime: end_time
+          endTime: end_time,
+          rsvpStatus: rsvp_status
         }))
         .filter(e => new Date(e.endTime) > new Date());
 
@@ -284,18 +285,41 @@ export default class App extends React.Component {
       }
     })();
 
-    return pinnedOnly && _events ? _events.filter(e => pinnedEventIds.indexOf(e.id) !== -1 ) : _events;
+    return pinnedOnly && _events ? _events.filter(e => e.rsvpStatus === 'attending' || e.rsvpStatus === 'unsure' || pinnedEventIds.indexOf(e.id) !== -1 ) : _events;
   }
 
   toggleOnlyPinned = (pinnedOnly) => {
     this.setState({ pinnedOnly });
   }
 
+  onRSVPChange = (eId, rsvpStatus) => {
+    // yay, optimism! fire&forget
+    const postRSVP = status => window.FB.api(`/${eId}/${status}`, 'POST', response => {});
+    switch (rsvpStatus) {
+      case 'attending':
+        postRSVP('attending');
+        break
+      case 'unsure':
+        postRSVP('maybe');
+        break
+      case 'not_attending':
+        postRSVP('declined');
+        this.onSwiped(eId);
+    }
+
+    const { events, nearbyEvents } = this.state;
+
+    this.setState({
+      events: events ? events.map(e => e.id === eId ? { ...e, rsvpStatus } : e) : events,
+      nearbyEvents: nearbyEvents ? nearbyEvents.map(e => e.id === eId ? { ...e, rsvpStatus } : e) : nearbyEvents
+    });
+  }
+
   render() {
     const {
       state: { places, searchQuery, view, toasts, pinnedEventIds = [], authResponse, pinnedOnly },
       onAddPlaces, onAddPlacesFirstTime, onLogin, onSearch, filterEvents, transitionTo,
-      onPin, getCurrentViewEvents, toggleOnlyPinned, onSwiped
+      onPin, getCurrentViewEvents, toggleOnlyPinned, onSwiped, onRSVPChange
     } = this;
 
     return (
@@ -319,6 +343,7 @@ export default class App extends React.Component {
             onSwiped={onSwiped}
             toggleOnlyPinned={toggleOnlyPinned}
             pinnedOnly={pinnedOnly}
+            onRSVPChange={onRSVPChange}
           />
         )}
         <Toaster>

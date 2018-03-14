@@ -33,7 +33,7 @@ export default class WelcomePage extends React.Component {
     window.FB.login(response => {
       this.props.onLogin(response.authResponse);
     }, {
-      scope: 'user_events',
+      scope: 'user_events,rsvp_status',
       return_scopes: true
     });
   }

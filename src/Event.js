@@ -1,6 +1,7 @@
 import React from 'react';
 import debounce from 'lodash/debounce';
 import Swipeable from 'react-swipeable'
+import Dropdown from 'react-select';
 import { t, propTypes } from 'tcomb-react';
 import cx from 'classnames';
 import View from 'react-flexview';
@@ -27,7 +28,9 @@ export default class Event extends React.Component {
     })),
     pinned: t.Boolean,
     onPin: t.Function,
-    onSwiped: t.Function
+    rsvpStatus: t.maybe(t.String),
+    onSwiped: t.Function,
+    onRSVPChange: t.Function
   });
 
   state = {
@@ -46,7 +49,20 @@ export default class Event extends React.Component {
     this.setState({ showModal: false });
   }
 
-  templateModal({ name, description, onDismiss, cover, id }) {
+  onRSVPChange = (o) => this.props.onRSVPChange(this.props.id, o.value);
+
+  templateModal({ name, description = '', onDismiss, cover, id, rsvpStatus }) {
+    const options = [
+      { label: 'Going',
+        value: 'attending'
+      },
+      { label: 'Interested',
+        value: 'unsure'
+      },
+      { label: 'Not interested',
+        value: 'not_attending'
+      }
+    ];
     return (
       <Modal className='event-modal' onDismiss={onDismiss} title={name}>
         <img
@@ -55,6 +71,19 @@ export default class Event extends React.Component {
           style={{ width: 'calc(100% + 30px)' }}
           src={cover.source || `https://graph.facebook.com/${id}/picture?access_token=963390470430059|bGCaVUpEO9xur5e05TOFQdF7uUY&type=large`}
         />
+        <View style={{ position: 'relative' }}>
+          <View style={{ position: 'absolute', width: 150, right: 10, top: -75 }}>
+            <Dropdown
+              style={{ width: 150 }}
+              clearable={false}
+              searchable={false}
+              placeholder='RSVP'
+              options={options}
+              value={rsvpStatus}
+              onChange={this.onRSVPChange}
+            />
+          </View>
+        </View>
         <FormattedText>
           {description}
         </FormattedText>
@@ -89,7 +118,7 @@ export default class Event extends React.Component {
   }
 
   render() {
-    const { name, id, place, description, startTime, endTime, cover, onPin, pinned } = this.props;
+    const { name, id, place, description, startTime, endTime, cover, onPin, pinned, rsvpStatus } = this.props;
     const { showModal } = this.state;
 
     const startDateTime = new Date(startTime);
@@ -110,7 +139,7 @@ export default class Event extends React.Component {
         onSwipedRight={this.onSwiped}
         innerRef={ref => this.ref = ref}
       >
-        {showModal && this.templateModal({ name, description, onDismiss: this.closeModal, cover, id })}
+        {showModal && this.templateModal({ name, description, onDismiss: this.closeModal, cover, id, rsvpStatus })}
         <View shrink={false}>
           <div
             className='image'
@@ -120,7 +149,7 @@ export default class Event extends React.Component {
           />
         </View>
         <View grow column className='content'>
-          <i className={cx('fa fa-thumb-tack pin', { pinned })} aria-hidden='true' onClick={() => onPin(id)} />
+          <i className={cx('fa fa-thumb-tack pin', { pinned: pinned || rsvpStatus === 'attending' || rsvpStatus === 'unsure' })} aria-hidden='true' onClick={() => onPin(id)} />
           <View className='title' width='100%'>
             <a href={`https://www.facebook.com/events/${id}/`} target='_blank'>
               {name}
