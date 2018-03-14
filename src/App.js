@@ -106,7 +106,7 @@ export default class App extends React.Component {
     ].join('-');
 
     const eventsRequest = this.get({
-      ids: savedPlacesIds.join(','),
+      ids: [this.state.authResponse.userID].concat(savedPlacesIds).join(','),
       fields: `events.fields(cover.fields(id,source), id, name, description, place, start_time, end_time).since(${sinceString})`
     })
 
