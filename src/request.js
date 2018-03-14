@@ -1,9 +1,9 @@
 import request from 'request-promise';
 import config from '../config.json';
 
-export const get = (accessToken, uri, qs, getAll = true) => {
+export const get = (accessToken, qs, getAll = true) => {
   const _request = request({
-    uri,
+    uri: 'https://graph.facebook.com/v2.12/',
     method: 'GET',
     qs: {
       access_token: accessToken,

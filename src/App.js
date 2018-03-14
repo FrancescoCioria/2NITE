@@ -79,7 +79,7 @@ export default class App extends React.Component {
   getPlaces() {
     const { savedPlacesIds } = this.state;
 
-    const placesRequest = this.get('https://graph.facebook.com/v2.7/', {
+    const placesRequest = this.get({
       ids: savedPlacesIds.join(',')
     })
 
@@ -105,7 +105,7 @@ export default class App extends React.Component {
       this.pad2(since.getDate())
     ].join('-');
 
-    const eventsRequest = this.get('https://graph.facebook.com/v2.7/', {
+    const eventsRequest = this.get({
       ids: savedPlacesIds.join(','),
       fields: `events.fields(cover.fields(id,source), id, name, description, place, start_time, end_time).since(${sinceString})`
     })
