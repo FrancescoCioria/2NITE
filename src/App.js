@@ -8,7 +8,7 @@ import View from 'react-flexview';
 import { TimerToast } from 'buildo-react-components/lib/toaster';
 import TextOverflow from 'buildo-react-components/lib/text-overflow';
 import { t, propTypes } from 'tcomb-react';
-import { get, getPreferences, createUser, updatePlaces, updatePinned, updateDismissed } from './request';
+import { get as _get, getPreferences, createUser, updatePlaces, updatePinned, updateDismissed } from './request';
 import EventSearch from './eventsSearch';
 import EventsPage from './EventsPage';
 import WelcomePage from './WelcomePage';
@@ -68,6 +68,10 @@ export default class App extends React.Component {
     }
   }
 
+  get(...args) {
+    return _get(this.state.authResponse.accessToken, ...args);
+  }
+
   pad2(value) {
     return value > 9 ? value : `0${value}`;
   }
@@ -75,7 +79,7 @@ export default class App extends React.Component {
   getPlaces() {
     const { savedPlacesIds } = this.state;
 
-    const placesRequest = get('https://graph.facebook.com/v2.7/', {
+    const placesRequest = this.get('https://graph.facebook.com/v2.7/', {
       ids: savedPlacesIds.join(',')
     })
 
@@ -101,7 +105,7 @@ export default class App extends React.Component {
       this.pad2(since.getDate())
     ].join('-');
 
-    const eventsRequest = get('https://graph.facebook.com/v2.7/', {
+    const eventsRequest = this.get('https://graph.facebook.com/v2.7/', {
       ids: savedPlacesIds.join(','),
       fields: `events.fields(cover.fields(id,source), id, name, description, place, start_time, end_time).since(${sinceString})`
     })
@@ -129,7 +133,7 @@ export default class App extends React.Component {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
         distance: 2500,
-        accessToken: '963390470430059|bGCaVUpEO9xur5e05TOFQdF7uUY'
+        accessToken: this.state.authResponse.accessToken
       });
 
       es.search()

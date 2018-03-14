@@ -1,11 +1,12 @@
 import request from 'request-promise';
+import config from '../config.json';
 
-export const get = (uri, qs, getAll = true) => {
+export const get = (accessToken, uri, qs, getAll = true) => {
   const _request = request({
     uri,
     method: 'GET',
     qs: {
-      access_token: '963390470430059|bGCaVUpEO9xur5e05TOFQdF7uUY',
+      access_token: accessToken,
       ...qs
     },
     json: true
@@ -19,7 +20,7 @@ export const get = (uri, qs, getAll = true) => {
 
 let userDataId = null;
 export const getPreferences = userId => {
-  return fetch('https://api.airtable.com/v0/appdkslzk5QlO95EW/2NITE?api_key=keyRXab9tyXiaFoAd')
+  return fetch(`https://api.airtable.com/v0/appdkslzk5QlO95EW/2NITE?api_key=${config.airTableApiKey}`)
     .then(res => res.json())
     .then(json => {
       const userData = json.records.filter(r => r.fields.UserId === userId)[0];
@@ -38,7 +39,7 @@ export const getPreferences = userId => {
 export const updatePlaces = (userId, savedPlacesIds) => {
   request({
     method: 'PATCH',
-    uri: `https://api.airtable.com/v0/appdkslzk5QlO95EW/2NITE/${userDataId}?api_key=keyRXab9tyXiaFoAd`,
+    uri: `https://api.airtable.com/v0/appdkslzk5QlO95EW/2NITE/${userDataId}?api_key=${config.airTableApiKey}`,
     body: {
       fields: {
         Pages: JSON.stringify(savedPlacesIds)
@@ -51,7 +52,7 @@ export const updatePlaces = (userId, savedPlacesIds) => {
 export const updatePinned = (userId, pinnedEventIds) => {
   request({
     method: 'PATCH',
-    uri: `https://api.airtable.com/v0/appdkslzk5QlO95EW/2NITE/${userDataId}?api_key=keyRXab9tyXiaFoAd`,
+    uri: `https://api.airtable.com/v0/appdkslzk5QlO95EW/2NITE/${userDataId}?api_key=${config.airTableApiKey}`,
     body: {
       fields: {
         Pinned: JSON.stringify(pinnedEventIds)
@@ -64,7 +65,7 @@ export const updatePinned = (userId, pinnedEventIds) => {
 export const updateDismissed = (userId, dismissedEventIds) => {
   request({
     method: 'PATCH',
-    uri: `https://api.airtable.com/v0/appdkslzk5QlO95EW/2NITE/${userDataId}?api_key=keyRXab9tyXiaFoAd`,
+    uri: `https://api.airtable.com/v0/appdkslzk5QlO95EW/2NITE/${userDataId}?api_key=${config.airTableApiKey}`,
     body: {
       fields: {
         Dismissed: JSON.stringify(dismissedEventIds)
@@ -77,7 +78,7 @@ export const updateDismissed = (userId, dismissedEventIds) => {
 export const createUser = (userId, savedPlacesIds) => {
   request({
     method: 'POST',
-    uri: 'https://api.airtable.com/v0/appdkslzk5QlO95EW/2NITE?api_key=keyRXab9tyXiaFoAd',
+    uri: `https://api.airtable.com/v0/appdkslzk5QlO95EW/2NITE?api_key=${config.airTableApiKey}`,
     body: {
       fields: {
         UserId: userId,
